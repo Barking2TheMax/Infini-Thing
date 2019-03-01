@@ -17,19 +17,26 @@ public class BucketEvents implements Listener {
     private ItemStack waterBucket;
     private ItemStack lavaBucket;
 
+    private void InstantiateVars(PlayerBucketEvent event){
+        player = event.getPlayer();
+        playerBucket = player.getItemInHand();
+        waterBucket = Main.water.CreateInstance();
+        lavaBucket = Main.lava.CreateInstance();
+    }
+
     @EventHandler
     public void onPlayerBucketEmptyEvent (PlayerBucketEmptyEvent event){
         InstantiateVars(event);
         double cost;
 
-        if(playerBucket.equals(waterBucket)){
+        if(playerBucket.isSimilar(waterBucket)){
             try{
                 cost = Main.config.getDouble("bucket.water.use-cost");
                 UseInfiniBucket(player, event, waterBucket, cost);
             }catch (Exception e){
                 Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.water.use-cost in config.yml is wrong type, try float.");
             }
-        }else if(playerBucket.equals(lavaBucket)){
+        }else if(playerBucket.isSimilar(lavaBucket)){
             try{
                 cost = Main.config.getInt("bucket.lava.use-cost");
                 UseInfiniBucket(player, event, lavaBucket, cost);
@@ -44,21 +51,14 @@ public class BucketEvents implements Listener {
     public void onPlayerBucketFillEvent (PlayerBucketFillEvent event){
         InstantiateVars(event);
 
-        if(playerBucket.equals(Main.empty.createInstance())) {
+        if(playerBucket.isSimilar(Main.empty.CreateInstance())) {
             if (event.getItemStack().equals(new ItemStack(Material.LAVA_BUCKET, 1))){
                 FillInfiniBucket(player, event, lavaBucket);
 
-            }else if(event.getItemStack().equals(new ItemStack(Material.WATER_BUCKET, 1))){
+            }else if(event.getItemStack().isSimilar(new ItemStack(Material.WATER_BUCKET, 1))){
                 FillInfiniBucket(player, event, waterBucket);
             }
         }
-    }
-
-    private void InstantiateVars(PlayerBucketEvent event){
-        player = event.getPlayer();
-        playerBucket = player.getItemInHand();
-        waterBucket = Main.water.createInstance();
-        lavaBucket = Main.lava.createInstance();
     }
 
     private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, ItemStack bucket, double cost){
