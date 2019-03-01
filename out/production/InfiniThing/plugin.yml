@@ -1,5 +1,5 @@
 name: InfiniThing
-description:
+description: A plugin that provides players with an item that has infinite uses, but at a cost.
 version: 1.0
 author: TehBossCat
 main: me.tehbosscat.infinithing.Main
