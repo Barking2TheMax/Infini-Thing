@@ -11,13 +11,13 @@ public class InfiniBucketWater extends InfiniBucket{
 
     @Override
     public void giveItems(Player player){
-        player.getInventory().addItem(createInstance());
+        player.getInventory().addItem(CreateInstance());
     }
 
     @Override
-    public ItemStack createInstance(){
-        String description = Main.config.getString("bucket.water.lore");
-        double price = Main.config.getDouble("bucket.water.use-cost");
-        return createInfiniBucket(Material.WATER_BUCKET, NAME, description, price);
+    public ItemStack CreateInstance(){
+        String description = Main.config.getString("bucket.types..water.lore");
+        double price = Main.config.getDouble("bucket.types.water.use-cost");
+        return CreateInfiniBucket(Material.WATER_BUCKET, NAME, description, price);
     }
 }

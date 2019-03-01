@@ -11,13 +11,13 @@ public class InfiniBucketLava extends InfiniBucket{
 
     @Override
     public void giveItems(Player player){
-        player.getInventory().addItem(createInstance());
+        player.getInventory().addItem(CreateInstance());
     }
 
     @Override
-    public ItemStack createInstance(){
-        String description = Main.config.getString("bucket.lava.lore");
-        double price = Main.config.getDouble("bucket.lava.use-cost");
-        return createInfiniBucket(Material.LAVA_BUCKET, NAME, description, price);
+    public ItemStack CreateInstance(){
+        String description = Main.config.getString("bucket.types.lava.lore");
+        double price = Main.config.getDouble("bucket.types.lava.use-cost");
+        return CreateInfiniBucket(Material.LAVA_BUCKET, NAME, description, price);
     }
 }

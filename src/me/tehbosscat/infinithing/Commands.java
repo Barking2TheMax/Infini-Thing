@@ -31,17 +31,19 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
                     switch(index){
                         // Bucket
                         case 0:
-                            if(Main.config.getBoolean("bucket.spawn-cost-enabled")){
-                                try{
-                                    cost = Main.config.getDouble("bucket.spawn-cost");
+                            if(Main.config.getBoolean("bucket.options.spawning.spawnable")){
+                                if(Main.config.getBoolean("bucket.options.spawning.spawn-cost-enabled")){
+                                    try{
+                                        cost = Main.config.getDouble("bucket.options.spawning.spawn-cost");
+                                        GiveInfiniBucket(player, Main.empty, cost);
+                                    }catch (Exception e){
+                                        Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.options.spawning.spawn-cost in config.yml is wrong type, try float.");
+                                    }
+                                }else{
                                     GiveInfiniBucket(player, Main.empty, cost);
-                                }catch (Exception e){
-                                    Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.spawn-cost in config.yml is wrong type, try float.");
                                 }
-                            }else{
-                                GiveInfiniBucket(player, Main.empty, cost);
+                                return true;
                             }
-                            return true;
 
                         // Pearl
                         case 1:
@@ -70,7 +72,7 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
 
     public static void GiveInfiniBucket(Player player, InfiniBucket bucketItem, double cost){
         if (Main.economy.has(player, cost)){
-            ItemStack bucket = bucketItem.createInstance();
+            ItemStack bucket = bucketItem.CreateInstance();
 
             if(!player.getInventory().contains(bucket)){
                 Main.SendPlayerMessage(player,"Thank you for using " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket.");
@@ -86,7 +88,7 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
     }
 
     public static void GiveInfiniBucket(Player player, InfiniBucket bucketItem){
-        ItemStack bucket = bucketItem.createInstance();
+        ItemStack bucket = bucketItem.CreateInstance();
 
         if(!player.getInventory().contains(bucket)){
             Main.SendPlayerMessage(player,"Thank you for using " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket.");
