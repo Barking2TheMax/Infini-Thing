@@ -1,0 +1,21 @@
+bucket:
+  lore: "A bucket with unlimited power. Left click the air to select your bucket type."
+  spawn-cost-enabled: true
+  spawn-cost: 1000
+  change-cost-enabled: false
+  change-cost: 100
+
+  lava:
+    enabled: true
+    lore: "An infinite source of lava."
+    use-cost: 100
+
+  water:
+    enabled: true
+    lore: "An infinite source of water."
+    use-cost: 10
+
+  milk:
+    enabled: false
+    lore: "An infinite source of malk."
+    use-cost: 1000

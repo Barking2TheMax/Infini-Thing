@@ -1,0 +1,11 @@
+name: InfiniThing
+description:
+version: 1.0
+author: TehBossCat
+main: me.tehbosscat.infinithing.Main
+
+commands:
+  infini:
+    aliases: [inf]
+    usage: /<command> [bucket|pearl]
+    description:
