@@ -2,8 +2,6 @@ bucket:
   lore: "A bucket with unlimited power. Left click the air to select your bucket type."
   spawn-cost-enabled: true
   spawn-cost: 1000
-  change-cost-enabled: false
-  change-cost: 100
 
   lava:
     enabled: true
