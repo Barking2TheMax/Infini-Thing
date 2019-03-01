@@ -8,29 +8,46 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 
 public class InfiniBucket implements Listener {
     private static final String NAME = ChatColor.WHITE + "Empty "+ ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Bucket";
-    private static final String LORE_STRING = Main.config.getString("bucket.lore");
+    private static final String LORE_STRING = Main.config.getString("bucket.types.empty.lore");
 
     public void giveItems(Player player){
-        player.getInventory().addItem(createInstance());
+        player.getInventory().addItem(CreateInstance());
     }
 
-    public ItemStack createInstance(){
-        return createInfiniBucket(Material.BUCKET, NAME, LORE_STRING, 0);
+    public ItemStack CreateInstance(){
+        return CreateInfiniBucket(Material.BUCKET, NAME, LORE_STRING);
+
     }
 
-    protected static ItemStack createInfiniBucket(Material mat, String name, String lore, double price){
+    private static ItemStack CreateInfiniBucket(Material mat, String name, String lore){
+        return InfiniBucket.AddMeta(new ItemStack(mat, 1), name, lore);
+    }
+
+    private static ItemStack AddMeta(ItemStack item, String name, String loreString){
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName(name);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(loreString);
+        lore.add("Click the air to select your bucket type.");
+        meta.setLore(lore);
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    protected static ItemStack CreateInfiniBucket(Material mat, String name, String lore, double price){
         ItemStack item = new ItemStack(mat, 1);
-
-        return InfiniBucket.addMeta(item, name, lore, price);
+        return InfiniBucket.AddMeta(item, name, lore, price);
     }
 
-    protected static ItemStack addMeta(ItemStack item, String name, String loreString, double price){
+    protected static ItemStack AddMeta(ItemStack item, String name, String loreString, double price){
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(name);
