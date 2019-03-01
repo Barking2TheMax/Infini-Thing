@@ -31,17 +31,17 @@ public class BucketEvents implements Listener {
 
         if(playerBucket.isSimilar(waterBucket)){
             try{
-                cost = Main.config.getDouble("bucket.water.use-cost");
+                cost = Main.config.getDouble("bucket.types.water.use-cost");
                 UseInfiniBucket(player, event, waterBucket, cost);
             }catch (Exception e){
-                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.water.use-cost in config.yml is wrong type, try float.");
+                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "bucket.water.use-cost in config.yml is wrong type, try float.");
             }
         }else if(playerBucket.isSimilar(lavaBucket)){
             try{
-                cost = Main.config.getInt("bucket.lava.use-cost");
+                cost = Main.config.getInt("bucket.types.lava.use-cost");
                 UseInfiniBucket(player, event, lavaBucket, cost);
             }catch (Exception e){
-                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.lava.use-cost in config.yml is wrong type, try float.");
+                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "bucket.lava.use-cost in config.yml is wrong type, try float.");
             }
         }
     }

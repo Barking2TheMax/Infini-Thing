@@ -40,10 +40,12 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
                                         Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.options.spawning.spawn-cost in config.yml is wrong type, try float.");
                                     }
                                 }else{
-                                    GiveInfiniBucket(player, Main.empty, cost);
+                                    GiveInfiniBucket(player, Main.empty);
                                 }
-                                return true;
+                            }else{
+                                Main.SendPlayerMessage(player,ChatColor.RED + "InfiniBucket has been disabled in the config.");
                             }
+                            return true;
 
                         // Pearl
                         case 1:
