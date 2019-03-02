@@ -26,29 +26,16 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
             if(cmd.getName().equalsIgnoreCase(baseCmd)){
                 if(args.length > 0){
                     int index = baseArgArray.indexOf( args[0].toLowerCase() );
-                    double cost = 0;
 
                     switch(index){
                         // Bucket
                         case 0:
-                            if(Main.config.getBoolean("bucket.options.spawning.spawnable")){
-                                if(Main.config.getBoolean("bucket.options.spawning.spawn-cost-enabled")){
-                                    try{
-                                        cost = Main.config.getDouble("bucket.options.spawning.spawn-cost");
-                                        GiveInfiniBucket(player, Main.empty, cost);
-                                    }catch (Exception e){
-                                        Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.options.spawning.spawn-cost in config.yml is wrong type, try float.");
-                                    }
-                                }else{
-                                    GiveInfiniBucket(player, Main.empty);
-                                }
-                            }else{
-                                Main.SendPlayerMessage(player,ChatColor.RED + "InfiniBucket has been disabled in the config.");
-                            }
+                            SpawnInfiniBucket(player);
                             return true;
 
                         // Pearl
                         case 1:
+                            SpawnInfiniPearl(player);
                             Main.SendPlayerMessage((Player)sender,ChatColor.RED + "InfiniPearl not yet implemented.");
                             return true;
 
@@ -72,6 +59,38 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
         }
     }
 
+    public static void SpawnInfiniBucket(Player player){
+        if(Main.config.getBoolean("bucket.options.spawning.spawnable")){
+            if(Main.config.getBoolean("bucket.options.spawning.spawn-cost-enabled")){
+                try{
+                    double cost = Main.config.getDouble("bucket.options.spawning.spawn-cost");
+                    GiveInfiniBucket(player, Main.empty, cost);
+                }catch (Exception e){
+                    Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.options.spawning.spawn-cost in config.yml is wrong type, try float.");
+                }
+            }else{
+                GiveInfiniBucket(player, Main.empty);
+            }
+        }else{
+            Main.SendPlayerMessage(player,ChatColor.RED + "InfiniBucket has been disabled in the config.");
+        }
+    }
+
+    public static void SpawnInfiniPearl(Player player){
+
+    }
+
+    public static void GiveInfiniBucket(Player player, InfiniBucket bucketItem){
+        ItemStack bucket = bucketItem.CreateInstance();
+
+        if(!player.getInventory().contains(bucket)){
+            Main.SendPlayerMessage(player,"Thank you for using " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket.");
+            bucketItem.giveItems(player);
+        }else{
+            Main.SendPlayerMessage(player,ChatColor.RED + "You already have an " + bucket.getItemMeta().getDisplayName() + ".");
+        }
+    }
+
     public static void GiveInfiniBucket(Player player, InfiniBucket bucketItem, double cost){
         if (Main.economy.has(player, cost)){
             ItemStack bucket = bucketItem.CreateInstance();
@@ -86,17 +105,6 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
             }
         }else {
             Main.SendPlayerMessage(player,ChatColor.RED + "You have insufficient funds.");
-        }
-    }
-
-    public static void GiveInfiniBucket(Player player, InfiniBucket bucketItem){
-        ItemStack bucket = bucketItem.CreateInstance();
-
-        if(!player.getInventory().contains(bucket)){
-            Main.SendPlayerMessage(player,"Thank you for using " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket.");
-            bucketItem.giveItems(player);
-        }else{
-            Main.SendPlayerMessage(player,ChatColor.RED + "You already have an " + bucket.getItemMeta().getDisplayName() + ".");
         }
     }
 }

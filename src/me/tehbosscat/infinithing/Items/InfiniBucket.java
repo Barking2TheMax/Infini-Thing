@@ -28,6 +28,11 @@ public class InfiniBucket implements Listener {
         return InfiniBucket.AddMeta(new ItemStack(mat, 1), name, lore);
     }
 
+    protected static ItemStack CreateInfiniBucket(Material mat, String name, String lore, double price){
+        ItemStack item = new ItemStack(mat, 1);
+        return InfiniBucket.AddMeta(item, name, lore, price);
+    }
+
     private static ItemStack AddMeta(ItemStack item, String name, String loreString){
         ItemMeta meta = item.getItemMeta();
 
@@ -42,11 +47,6 @@ public class InfiniBucket implements Listener {
         return item;
     }
 
-    protected static ItemStack CreateInfiniBucket(Material mat, String name, String lore, double price){
-        ItemStack item = new ItemStack(mat, 1);
-        return InfiniBucket.AddMeta(item, name, lore, price);
-    }
-
     protected static ItemStack AddMeta(ItemStack item, String name, String loreString, double price){
         ItemMeta meta = item.getItemMeta();
 
@@ -54,7 +54,7 @@ public class InfiniBucket implements Listener {
         ArrayList<String> lore = new ArrayList<>();
         lore.add(loreString);
         if (price > 0){
-            lore.add("Costs "+ ChatColor.GREEN + "$" + price + ChatColor.DARK_PURPLE  + ChatColor.ITALIC + " per use.");
+            lore.add("Costs " + ChatColor.ITALIC + ChatColor.GREEN + "$" + price + ChatColor.DARK_PURPLE + " per use.");
         }
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

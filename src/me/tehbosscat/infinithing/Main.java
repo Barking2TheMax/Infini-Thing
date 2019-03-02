@@ -27,8 +27,17 @@ public class Main extends JavaPlugin {
     public static InfiniBucket water;
     public static InfiniBucket lava;
 
-    public void onEnable(){
+    private boolean SetupEconomy(){
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if(economyProvider != null){
+            economy = economyProvider.getProvider();
+            SendConsoleMessage("Economy plugin found.");
+        }
 
+        return (economy != null);
+    }
+
+    public void onEnable(){
         if(SetupEconomy()){
             console = getServer().getConsoleSender();
             pluginManager = getServer().getPluginManager();
@@ -47,7 +56,7 @@ public class Main extends JavaPlugin {
 
             SendConsoleMessage(ChatColor.GREEN + "Online!");
         }else{
-            SendConsoleMessage("Economy plugin found.");
+            SendConsoleMessage("Economy plugin not found.");
             SendConsoleMessage(ChatColor.RED + "Offline!");
         }
     }
@@ -58,15 +67,5 @@ public class Main extends JavaPlugin {
 
     public static void SendPlayerMessage(Player player, String string){
         player.sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket] " + string);
-    }
-
-    private boolean SetupEconomy(){
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if(economyProvider != null){
-            economy = economyProvider.getProvider();
-            SendConsoleMessage("Economy plugin found.");
-        }
-
-        return (economy != null);
     }
 }
