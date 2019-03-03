@@ -7,6 +7,7 @@ import me.tehbosscat.infinithing.Items.InfiniBucketWater;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -16,10 +17,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
 
-    public static Economy economy = null;
+    public static Server server;
     public static ConsoleCommandSender console;
     public static PluginManager pluginManager;
     public static FileConfiguration config;
+    public static Economy economy = null;
 
     private Commands commands = new Commands();
 
@@ -28,7 +30,7 @@ public class Main extends JavaPlugin {
     public static InfiniBucket lava;
 
     private boolean SetupEconomy(){
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        RegisteredServiceProvider<Economy> economyProvider = server.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if(economyProvider != null){
             economy = economyProvider.getProvider();
             SendConsoleMessage("Economy plugin found.");
@@ -38,9 +40,10 @@ public class Main extends JavaPlugin {
     }
 
     public void onEnable(){
+        server = getServer();
         if(SetupEconomy()){
-            console = getServer().getConsoleSender();
-            pluginManager = getServer().getPluginManager();
+            console = server.getConsoleSender();
+            pluginManager = server.getPluginManager();
             config = getConfig();
 
             config.options().copyDefaults(true);
@@ -62,7 +65,7 @@ public class Main extends JavaPlugin {
     }
 
     public static void SendConsoleMessage(String string){
-        Bukkit.getServer().getConsoleSender().sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.GRAY + "Thing] " + string);
+       server.getConsoleSender().sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.GRAY + "Thing] " + string);
     }
 
     public static void SendPlayerMessage(Player player, String string){

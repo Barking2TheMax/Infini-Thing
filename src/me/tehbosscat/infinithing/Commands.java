@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Commands extends CommandExecute implements Listener, CommandExecutor {
-
     public String baseCmd = "infini";
     public ArrayList<String> baseArgArray = new ArrayList<>(Arrays.asList("bucket", "pearl"));
 

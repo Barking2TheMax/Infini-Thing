@@ -1,25 +1,39 @@
 package me.tehbosscat.infinithing.Events;
 
 import me.tehbosscat.infinithing.Main;
+import me.tehbosscat.infinithing.Menus.BucketMenu;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import static org.bukkit.event.block.Action.*;
 
 public class BucketEvents implements Listener {
     private Player player;
-    private ItemStack playerBucket;
+    private ItemStack playerItem;
+    private ItemStack emptyBucket;
     private ItemStack waterBucket;
     private ItemStack lavaBucket;
 
     private void InstantiateVars(PlayerBucketEvent event){
         player = event.getPlayer();
-        playerBucket = player.getItemInHand();
+        playerItem = player.getItemInHand();
+        waterBucket = Main.water.CreateInstance();
+        lavaBucket = Main.lava.CreateInstance();
+    }
+
+    private void InstantiateVars(PlayerInteractEvent event){
+        player = event.getPlayer();
+        playerItem = event.getItem();
+        emptyBucket = Main.empty.CreateInstance();
         waterBucket = Main.water.CreateInstance();
         lavaBucket = Main.lava.CreateInstance();
     }
@@ -29,14 +43,14 @@ public class BucketEvents implements Listener {
         InstantiateVars(event);
         double cost;
 
-        if(playerBucket.isSimilar(waterBucket)){
+        if(playerItem.isSimilar(waterBucket)){
             try{
                 cost = Main.config.getDouble("bucket.types.water.use-cost");
                 UseInfiniBucket(player, event, waterBucket, cost);
             }catch (Exception e){
                 Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "bucket.water.use-cost in config.yml is wrong type, try float.");
             }
-        }else if(playerBucket.isSimilar(lavaBucket)){
+        }else if(playerItem.isSimilar(lavaBucket)){
             try{
                 cost = Main.config.getInt("bucket.types.lava.use-cost");
                 UseInfiniBucket(player, event, lavaBucket, cost);
@@ -46,12 +60,23 @@ public class BucketEvents implements Listener {
         }
     }
 
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event){
+        BucketMenu menu = new BucketMenu();
+        InstantiateVars(event);
+        Action action = event.getAction();
+
+        if (event.getItem().isSimilar(emptyBucket) && ( action.equals(LEFT_CLICK_AIR) || action.equals(LEFT_CLICK_BLOCK))){
+            menu.newBucketMenu(player);
+        }
+    }
+
     // TODO Remove this event and add GUI.
     @EventHandler
     public void onPlayerBucketFillEvent (PlayerBucketFillEvent event){
         InstantiateVars(event);
 
-        if(playerBucket.isSimilar(Main.empty.CreateInstance())) {
+        if(playerItem.isSimilar(Main.empty.CreateInstance())) {
             if (event.getItemStack().equals(new ItemStack(Material.LAVA_BUCKET, 1))){
                 FillInfiniBucket(player, event, lavaBucket);
 

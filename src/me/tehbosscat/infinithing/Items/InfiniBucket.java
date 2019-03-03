@@ -39,7 +39,7 @@ public class InfiniBucket implements Listener {
         meta.setDisplayName(name);
         ArrayList<String> lore = new ArrayList<>();
         lore.add(loreString);
-        lore.add("Click the air to select your bucket type.");
+        lore.add("Click to select your bucket type.");
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
