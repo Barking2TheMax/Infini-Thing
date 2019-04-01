@@ -1,5 +1,6 @@
 package me.tehbosscat.infinithing.Events;
 
+import me.tehbosscat.infinithing.Items.InfiniBucket;
 import me.tehbosscat.infinithing.Main;
 import me.tehbosscat.infinithing.Menus.BucketMenu;
 import org.bukkit.ChatColor;
@@ -8,10 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import static org.bukkit.event.block.Action.*;
@@ -33,6 +31,14 @@ public class BucketEvents implements Listener {
     private void InstantiateVars(PlayerInteractEvent event){
         player = event.getPlayer();
         playerItem = event.getItem();
+        emptyBucket = Main.empty.CreateInstance();
+        waterBucket = Main.water.CreateInstance();
+        lavaBucket = Main.lava.CreateInstance();
+    }
+
+    private void InstantiateVars(PlayerDropItemEvent event){
+        player = event.getPlayer();
+        playerItem = event.getItemDrop().getItemStack();
         emptyBucket = Main.empty.CreateInstance();
         waterBucket = Main.water.CreateInstance();
         lavaBucket = Main.lava.CreateInstance();
@@ -71,7 +77,6 @@ public class BucketEvents implements Listener {
         }
     }
 
-    // TODO Remove this event and add GUI.
     @EventHandler
     public void onPlayerBucketFillEvent (PlayerBucketFillEvent event){
         InstantiateVars(event);
@@ -83,6 +88,15 @@ public class BucketEvents implements Listener {
             }else if(event.getItemStack().isSimilar(new ItemStack(Material.WATER_BUCKET, 1))){
                 FillInfiniBucket(player, event, waterBucket);
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItemEvent(PlayerDropItemEvent event) {
+        InstantiateVars(event);
+        if (playerItem.getItemMeta().getDisplayName().equals(waterBucket.getItemMeta().getDisplayName()) || playerItem.getItemMeta().getDisplayName().equals(lavaBucket.getItemMeta().getDisplayName())) {
+            event.getItemDrop().remove();
+            new InfiniBucket().giveItems(event.getPlayer());
         }
     }
 
