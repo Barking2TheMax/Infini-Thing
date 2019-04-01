@@ -7,7 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class InfiniBucketWater extends InfiniBucket{
-    private static final String NAME = ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water";
+    public static final String NAME = ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water";
+
+    public static String getLoreString(){
+        return Main.config.getString("bucket.types.water.lore");
+    }
+
+    public static double getPrice(){
+        return Main.config.getDouble("bucket.types.water.use-cost");
+    }
 
     @Override
     public void giveItems(Player player){
@@ -16,8 +24,8 @@ public class InfiniBucketWater extends InfiniBucket{
 
     @Override
     public ItemStack CreateInstance(){
-        String description = Main.config.getString("bucket.types..water.lore");
-        double price = Main.config.getDouble("bucket.types.water.use-cost");
+        String description = getLoreString();
+        double price = getPrice();
         return CreateInfiniBucket(Material.WATER_BUCKET, NAME, description, price);
     }
 }

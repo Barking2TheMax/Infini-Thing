@@ -7,7 +7,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class InfiniBucketLava extends InfiniBucket{
-    private final String NAME = ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava";
+    public static final String NAME = ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava";
+
+    public static String getLoreString(){
+        return Main.config.getString("bucket.types.lava.lore");
+    }
+
+    public static double getPrice(){
+        return Main.config.getDouble("bucket.types.lava.use-cost");
+    }
 
     @Override
     public void giveItems(Player player){
@@ -16,8 +24,8 @@ public class InfiniBucketLava extends InfiniBucket{
 
     @Override
     public ItemStack CreateInstance(){
-        String description = Main.config.getString("bucket.types.lava.lore");
-        double price = Main.config.getDouble("bucket.types.lava.use-cost");
+        String description = getLoreString();
+        double price = getPrice();
         return CreateInfiniBucket(Material.LAVA_BUCKET, NAME, description, price);
     }
 }

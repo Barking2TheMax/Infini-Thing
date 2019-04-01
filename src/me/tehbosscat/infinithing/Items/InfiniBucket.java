@@ -12,8 +12,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class InfiniBucket implements Listener {
-    private static final String NAME = ChatColor.WHITE + "Empty "+ ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Bucket";
-    private static final String LORE_STRING = Main.config.getString("bucket.types.empty.lore");
+    public static final String NAME = ChatColor.WHITE + "Empty "+ ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Bucket";
+    public static final String LORE_STRING = getLoreString();
+    private static final String ADD_LORE = "Click to select a bucket type.";
+
+    public static String getLoreString(){
+        return Main.config.getString("bucket.types.empty.lore");
+    }
+
+    public static double getPrice(){
+        return 0;
+    }
 
     public void giveItems(Player player){
         player.getInventory().addItem(CreateInstance());
@@ -21,11 +30,10 @@ public class InfiniBucket implements Listener {
 
     public ItemStack CreateInstance(){
         return CreateInfiniBucket(Material.BUCKET, NAME, LORE_STRING);
-
     }
 
     private static ItemStack CreateInfiniBucket(Material mat, String name, String lore){
-        return InfiniBucket.AddMeta(new ItemStack(mat, 1), name, lore);
+        return InfiniBucket.AddMeta(new ItemStack(mat, 1), name, lore, ADD_LORE);
     }
 
     protected static ItemStack CreateInfiniBucket(Material mat, String name, String lore, double price){
@@ -33,13 +41,13 @@ public class InfiniBucket implements Listener {
         return InfiniBucket.AddMeta(item, name, lore, price);
     }
 
-    private static ItemStack AddMeta(ItemStack item, String name, String loreString){
+    public static ItemStack AddMeta(ItemStack item, String name, String loreString, String addLore){
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(name);
         ArrayList<String> lore = new ArrayList<>();
         lore.add(loreString);
-        lore.add("Click to select your bucket type.");
+        lore.add(addLore);
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(meta);
