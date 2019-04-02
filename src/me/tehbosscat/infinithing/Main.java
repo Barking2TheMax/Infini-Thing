@@ -1,11 +1,13 @@
 package me.tehbosscat.infinithing;
 
 import me.tehbosscat.infinithing.Events.BucketEvents;
+import me.tehbosscat.infinithing.Events.PearlEvents;
 import me.tehbosscat.infinithing.Items.InfiniBucket;
 import me.tehbosscat.infinithing.Items.InfiniBucketLava;
 import me.tehbosscat.infinithing.Items.InfiniBucketWater;
+import me.tehbosscat.infinithing.Items.InfiniPearl;
+import me.tehbosscat.infinithing.Menus.BucketMenu;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,7 +17,12 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class Main extends JavaPlugin {
+
+    public static HashMap<UUID, Long> cooldown = new HashMap<>();
 
     public static Server server;
     public static ConsoleCommandSender console;
@@ -28,6 +35,7 @@ public class Main extends JavaPlugin {
     public static InfiniBucket empty;
     public static InfiniBucket water;
     public static InfiniBucket lava;
+    public static InfiniPearl pearl;
 
     private boolean SetupEconomy(){
         RegisteredServiceProvider<Economy> economyProvider = server.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
@@ -49,13 +57,22 @@ public class Main extends JavaPlugin {
             config.options().copyDefaults(true);
             saveConfig();
 
+            try{
+                PearlEvents.cooldownTime = config.getInt("pearl.cooldown.time");
+            }catch (Exception e){
+                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "pearl.cooldown.time in config.yml is wrong type, try int.");
+            }
+
             pluginManager.registerEvents(new BucketEvents(), this);
+            pluginManager.registerEvents(new BucketMenu(), this);
+            pluginManager.registerEvents(new PearlEvents(), this);
 
             getCommand(commands.baseCmd).setExecutor(commands);
 
             empty = new InfiniBucket();
             water = new InfiniBucketWater();
             lava = new InfiniBucketLava();
+            pearl = new InfiniPearl();
 
             SendConsoleMessage(ChatColor.GREEN + "Online!");
         }else{
