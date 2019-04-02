@@ -18,8 +18,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class BucketMenu implements Listener {
     private final static String NAME = "Select an " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Bucket";
     private final static int inventSize = 9;
-
     private final static String BUTTON_LORE = "Click to select this bucket type.";
+
+    private ItemStack waterBucket;
+    private ItemStack lavaBucket;
 
     public void newBucketMenu(Player player){
         Inventory menu = Main.server.createInventory(null, inventSize, NAME);
@@ -69,22 +71,32 @@ public class BucketMenu implements Listener {
         if(item == null || !item.hasItemMeta()) return;
 
         ItemStack emptyBucket = Main.empty.CreateInstance();
+        lavaBucket = Main.lava.CreateInstance();
+        waterBucket = Main.water.CreateInstance();
 
         if(item.getItemMeta().getDisplayName().equals(InfiniBucketLava.NAME)){
-            ReplaceBucket(player, emptyBucket, Main.lava.CreateInstance());
-            player.closeInventory();
+            if(!player.getInventory().contains(lavaBucket)){
+                ReplaceBucket(player, emptyBucket, lavaBucket);
+            }
+            else{
+                Main.SendPlayerMessage(player, ChatColor.RED + "A strange force prevents your from creating another" + ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava" + ChatColor.RED + " so close to the one in your inventory.");
+            }
         }else if (item.getItemMeta().getDisplayName().equals(InfiniBucketWater.NAME)){
-            ReplaceBucket(player, emptyBucket, Main.water.CreateInstance());
-            player.closeInventory();
+            if(!player.getInventory().contains(waterBucket)) {
+                ReplaceBucket(player, emptyBucket, waterBucket);
+            }
+            else {
+                Main.SendPlayerMessage(player, ChatColor.RED +"A strange force prevents your from creating another" + ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water" + ChatColor.RED + " so close to the one in your inventory.");
+            }
         }
+        player.closeInventory();
     }
 
     public static void ReplaceBucket(Player player, ItemStack oldBucket, ItemStack newBucket){
-        String bucketName = oldBucket.getItemMeta().getDisplayName();
         Inventory inventory = player.getInventory();
 
         for (int i = 0; i < inventory.getSize(); i++) {
-            if (inventory.getContents()[i].getItemMeta().getDisplayName().equals(bucketName)){
+            if (inventory.getContents()[i].equals(oldBucket)){
                 inventory.setItem(i , newBucket);
                 break;
             }
