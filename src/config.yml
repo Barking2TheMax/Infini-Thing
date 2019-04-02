@@ -1,0 +1,26 @@
+bucket:
+  options:
+    craftable: true
+    spawning:
+      spawnable: true
+      spawn-cost-enabled: false
+      spawn-cost: 1000
+
+  types:
+    empty:
+      lore: "A bucket with unlimited power."
+
+    lava:
+      enabled: true
+      lore: "An infinite source of lava."
+      use-cost: 100
+
+    water:
+      enabled: true
+      lore: "An infinite source of water."
+      use-cost: 10
+
+    milk:
+      enabled: false
+      lore: "An infinite source of malk."
+      use-cost: 1000

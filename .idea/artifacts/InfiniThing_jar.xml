@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="InfiniThing:jar">
+    <output-path>D:/Plugins/Server/plugins</output-path>
+    <root id="archive" name="InfiniThing.jar">
+      <element id="module-output" name="InfiniThing" />
+    </root>
+  </artifact>
+</component>

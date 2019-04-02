@@ -1,0 +1,11 @@
+name: InfiniThing
+description: A plugin that provides players with an item that has infinite uses, but at a cost.
+version: 1.1
+author: TehBossCat
+main: me.tehbosscat.infinithing.Main
+
+commands:
+  infini:
+    aliases: [inf]
+    usage: /<command> [bucket|pearl]
+    description:
