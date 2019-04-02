@@ -20,9 +20,7 @@ public class InfiniBucket implements Listener {
         return Main.config.getString("bucket.types.empty.lore");
     }
 
-    public static double getPrice(){
-        return 0;
-    }
+    public static double getPrice(){ return 0; }
 
     public void giveItems(Player player){
         player.getInventory().addItem(CreateInstance());

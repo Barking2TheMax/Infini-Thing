@@ -14,7 +14,12 @@ public class InfiniBucketLava extends InfiniBucket{
     }
 
     public static double getPrice(){
-        return Main.config.getDouble("bucket.types.lava.use-cost");
+        try{
+            return Main.config.getDouble("bucket.types.lava.use-cost");
+        }catch (Exception e){
+            Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.types.lava.use-cost in config.yml is wrong type, try float.");
+            return 0;
+        }
     }
 
     @Override

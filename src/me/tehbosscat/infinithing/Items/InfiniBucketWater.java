@@ -14,7 +14,12 @@ public class InfiniBucketWater extends InfiniBucket{
     }
 
     public static double getPrice(){
-        return Main.config.getDouble("bucket.types.water.use-cost");
+        try{
+            return Main.config.getDouble("bucket.types.water.use-cost");
+        }catch (Exception e){
+            Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY+ "bucket.types.water.use-cost in config.yml is wrong type, try float.");
+            return 0;
+        }
     }
 
     @Override
