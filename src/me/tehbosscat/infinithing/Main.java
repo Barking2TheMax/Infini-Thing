@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Main extends JavaPlugin {
-
     public static HashMap<UUID, Long> cooldown = new HashMap<>();
 
     public static Server server;
@@ -27,8 +26,6 @@ public class Main extends JavaPlugin {
     public static PluginManager pluginManager;
     public static FileConfiguration config;
     public static Economy economy;
-
-    public static HashMap<UUID, Long> cooldown = new HashMap<>();
     private Commands commands = new Commands();
 
 
@@ -42,13 +39,7 @@ public class Main extends JavaPlugin {
             config.options().copyDefaults(true);
             saveConfig();
 
-            try{
-                PearlEvents.cooldownTime = config.getInt("pearl.cooldown.time");
-            }catch (Exception e){
-                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "pearl.cooldown.time in config.yml is wrong type, try int.");
-            }
-
-            pluginManager.registerEvents(new PearlEvents(), this);
+            pluginManager.registerEvents(PearlEvents.GetInstance(), this);
             pluginManager.registerEvents(BucketEvents.GetInstance(), this);
             pluginManager.registerEvents(new BucketMenu(), this);
 
