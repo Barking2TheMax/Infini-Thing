@@ -1,7 +1,7 @@
 bucket:
   options:
-    craftable: true
     spawning:
+      craftable: false
       spawnable: true
       spawn-cost-enabled: false
       spawn-cost: 1000
@@ -24,3 +24,17 @@ bucket:
       enabled: false
       lore: "An infinite source of malk."
       use-cost: 1000
+
+pearl:
+  lore: "An ender pearl with infinite uses."
+  use-cost: 100
+
+  spawning:
+    craftable: false
+    spawnable: true
+    spawn-cost-enabled: false
+    spawn-cost: 15000
+
+  cooldown:
+    cooldown-enabled: true
+    time: 5
