@@ -1,6 +1,10 @@
 package me.tehbosscat.infinithing.Events;
 
-import me.tehbosscat.infinithing.Items.InfiniBucket;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniBucket;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniLava;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniWater;
+import me.tehbosscat.infinithing.Items.InfiniItem;
+import me.tehbosscat.infinithing.Items.InfiniItemFactory;
 import me.tehbosscat.infinithing.Main;
 import me.tehbosscat.infinithing.Menus.BucketMenu;
 import org.bukkit.ChatColor;
@@ -14,105 +18,96 @@ import org.bukkit.inventory.ItemStack;
 import static org.bukkit.event.block.Action.*;
 
 public class BucketEvents implements Listener {
+    private static BucketEvents INSTANCE;
+    private InfiniItemFactory f;
+
     private Player player;
     private ItemStack playerItem;
-    private ItemStack emptyBucket;
-    private ItemStack waterBucket;
-    private ItemStack lavaBucket;
 
-    private void InstantiateVars(PlayerBucketEvent event){
-        player = event.getPlayer();
-        playerItem = player.getItemInHand();
-        waterBucket = Main.water.CreateInstance();
-        lavaBucket = Main.lava.CreateInstance();
+
+    private BucketEvents(){
+        InfiniItemFactory f = InfiniItemFactory.GetInstance();
     }
 
-    private void InstantiateVars(PlayerInteractEvent event){
-        player = event.getPlayer();
-        playerItem = event.getItem();
-        emptyBucket = Main.empty.CreateInstance();
-        waterBucket = Main.water.CreateInstance();
-        lavaBucket = Main.lava.CreateInstance();
-    }
 
-    private void InstantiateVars(PlayerDropItemEvent event){
-        player = event.getPlayer();
-        playerItem = event.getItemDrop().getItemStack();
-        emptyBucket = Main.empty.CreateInstance();
-        waterBucket = Main.water.CreateInstance();
-        lavaBucket = Main.lava.CreateInstance();
+    public static BucketEvents GetInstance() {
+        if(INSTANCE == null){
+            INSTANCE = new BucketEvents();
+        }
+
+        return INSTANCE;
     }
 
     @EventHandler
     public void onPlayerBucketEmptyEvent (PlayerBucketEmptyEvent event){
-        InstantiateVars(event);
-        double cost;
+        player = event.getPlayer();
+        playerItem = player.getItemInHand();
 
-        if(playerItem.equals(waterBucket)){
-            try{
-                cost = Main.config.getDouble("bucket.types.water.use-cost");
-                UseInfiniBucket(player, event, waterBucket, cost);
-            }catch (Exception e){
-                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "bucket.water.use-cost in config.yml is wrong type, try float.");
-            }
-        }else if(playerItem.equals(lavaBucket)){
-            try{
-                cost = Main.config.getInt("bucket.types.lava.use-cost");
-                UseInfiniBucket(player, event, lavaBucket, cost);
-            }catch (Exception e){
-                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + "bucket.lava.use-cost in config.yml is wrong type, try float.");
-            }
+        if(playerItem.equals(f.CreateItem("water"))){
+            UseInfiniBucket(player, event, InfiniWater.GetInstance());
+
+        }else if(playerItem.equals( f.CreateItem("lava"))){
+            UseInfiniBucket(player, event, InfiniLava.GetInstance());
         }
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event){
-        if(!event.getAction().equals(LEFT_CLICK_BLOCK)){
-            InstantiateVars(event);
+        player = event.getPlayer();
+        playerItem = event.getItem();
 
-            if (event.getItem().equals(emptyBucket)) {
-                if (player.hasPermission("infini.bucket.spawn")) {
-                    new BucketMenu().newBucketMenu(player);
-                    event.setCancelled(true);
-                }
+        if (event.getItem().equals(f.CreateItem("empty"))) {
+            if (player.hasPermission("infini.bucket.spawn")) {
+                new BucketMenu().newBucketMenu(player);
+                event.setCancelled(true);
             }
         }
     }
 
     @EventHandler
     public void onPlayerBucketFillEvent (PlayerBucketFillEvent event){
-        InstantiateVars(event);
+        player = event.getPlayer();
+        playerItem = player.getItemInHand();
 
-        if(playerItem.equals(emptyBucket)){
-            if (event.getItemStack().equals(new ItemStack(Material.LAVA_BUCKET, 1))){
-                FillInfiniBucket(player, event, lavaBucket);
+        if(playerItem.equals(f.CreateItem("empty"))){
+            if (event.getItemStack().getType().equals(Material.LAVA_BUCKET)){
+                FillInfiniBucket(player, event, f.CreateItem("lava"));
 
-            }else if(event.getItemStack().equals(new ItemStack(Material.WATER_BUCKET, 1))){
-                FillInfiniBucket(player, event, waterBucket);
+            }else if(event.getItemStack().getType().equals(Material.WATER_BUCKET)){
+                FillInfiniBucket(player, event, f.CreateItem("water"));
             }
         }
     }
 
     @EventHandler
     public void onPlayerDropItemEvent(PlayerDropItemEvent event) {
-        InstantiateVars(event);
+        player = event.getPlayer();
+        playerItem = event.getItemDrop().getItemStack();
 
-        if (playerItem.equals(waterBucket) || playerItem.equals(lavaBucket)) {
+        ItemStack WATER = f.CreateItem("water");
+        ItemStack LAVA = f.CreateItem("lava");
+
+        if (playerItem.equals(WATER) || playerItem.equals(LAVA)) {
             event.getItemDrop().remove();
-            new InfiniBucket().giveItems(event.getPlayer());
+            player.getInventory().addItem(f.CreateItem("empty"));
         }
     }
 
-    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, ItemStack bucket, double cost){
+
+    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, InfiniItem type){
+        double cost = type.GetPrice();
+
         if(player.hasPermission("infini.bucket.use")){
             if (Main.economy.has(player, cost)){
-                event.setItemStack(bucket);
+                event.setItemStack(f.CreateItem(type));
                 Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + cost + ChatColor.WHITE + " has been charged to your account.");
                 Main.economy.withdrawPlayer(player, cost);
+
             }else {
                 Main.SendPlayerMessage(player,ChatColor.RED + "You have insufficient funds.");
                 event.setCancelled(true);
             }
+
         }else{
             Main.SendPlayerMessage(player, "You don't know how to use this item.");
             event.setCancelled(true);
@@ -124,10 +119,12 @@ public class BucketEvents implements Listener {
             if(!player.getInventory().contains(bucket)){
                 event.setItemStack(bucket);
                 Main.SendPlayerMessage(player, "You created a " + bucket.getItemMeta().getDisplayName() + ".");
+
             }else{
                 Main.SendPlayerMessage(player,ChatColor.RED + "You already have an " + bucket.getItemMeta().getDisplayName() + ".");
                 event.setCancelled(true);
             }
+
         }else{
             Main.SendPlayerMessage(player, "You don't know how to create an infinite source contained within a bucket.");
             event.setCancelled(true);

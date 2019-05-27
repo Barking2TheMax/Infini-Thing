@@ -1,11 +1,11 @@
 package me.tehbosscat.infinithing;
 
 import me.tehbosscat.infinithing.Events.BucketEvents;
-import me.tehbosscat.infinithing.Items.InfiniBucket;
-import me.tehbosscat.infinithing.Items.InfiniBucketLava;
-import me.tehbosscat.infinithing.Items.InfiniBucketWater;
+import me.tehbosscat.infinithing.Events.PearlEvents;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniBucket;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniLava;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniWater;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -15,29 +15,20 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class Main extends JavaPlugin {
 
     public static Server server;
     public static ConsoleCommandSender console;
     public static PluginManager pluginManager;
     public static FileConfiguration config;
-    public static Economy economy = null;
+    public static Economy economy;
 
+    public static HashMap<UUID, Long> cooldown = new HashMap<>();
     private Commands commands = new Commands();
 
-    public static InfiniBucket empty;
-    public static InfiniBucket water;
-    public static InfiniBucket lava;
-
-    private boolean SetupEconomy(){
-        RegisteredServiceProvider<Economy> economyProvider = server.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if(economyProvider != null){
-            economy = economyProvider.getProvider();
-            SendConsoleMessage("Economy plugin found.");
-        }
-
-        return (economy != null);
-    }
 
     public void onEnable(){
         server = getServer();
@@ -49,19 +40,28 @@ public class Main extends JavaPlugin {
             config.options().copyDefaults(true);
             saveConfig();
 
-            pluginManager.registerEvents(new BucketEvents(), this);
+            // Register Events.
+            pluginManager.registerEvents(BucketEvents.GetInstance(), this);
+            pluginManager.registerEvents(new PearlEvents(), this);
 
+            // Register Commands.
             getCommand(commands.baseCmd).setExecutor(commands);
-
-            empty = new InfiniBucket();
-            water = new InfiniBucketWater();
-            lava = new InfiniBucketLava();
 
             SendConsoleMessage(ChatColor.GREEN + "Online!");
         }else{
             SendConsoleMessage("Economy plugin not found.");
-            SendConsoleMessage(ChatColor.RED + "Offline!");
+            SendConsoleMessage(ChatColor.RED + "Offline.");
         }
+    }
+
+    private boolean SetupEconomy(){
+        RegisteredServiceProvider<Economy> economyProvider = server.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if(economyProvider != null){
+            economy = economyProvider.getProvider();
+            SendConsoleMessage("Economy plugin found.");
+        }
+
+        return (economy != null);
     }
 
     public static void SendConsoleMessage(String string){
