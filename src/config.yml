@@ -9,6 +9,7 @@ bucket:
   types:
     empty:
       lore: "A bucket with unlimited power."
+      use-cost: 0
 
     lava:
       enabled: true

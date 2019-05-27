@@ -1,8 +1,8 @@
 package me.tehbosscat.infinithing.Menus;
 
-import me.tehbosscat.infinithing.Items.InfiniBucket;
-import me.tehbosscat.infinithing.Items.InfiniBucketLava;
-import me.tehbosscat.infinithing.Items.InfiniBucketWater;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniBucket;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniLava;
+import me.tehbosscat.infinithing.Items.Buckets.InfiniWater;
 import me.tehbosscat.infinithing.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -27,8 +27,8 @@ public class BucketMenu implements Listener {
         Inventory menu = Main.server.createInventory(null, inventSize, NAME);
 
         ItemStack empty = AddMeta(new ItemStack(Material.STAINED_GLASS_PANE,1, (byte) 15));
-        ItemStack lavaButton = InfiniBucket.AddMeta(new ItemStack(Material.LAVA_BUCKET, 1), InfiniBucketLava.NAME, InfiniBucketLava.getLoreString(), BUTTON_LORE);
-        ItemStack waterButton = InfiniBucket.AddMeta(new ItemStack(Material.WATER_BUCKET, 1), InfiniBucketWater.NAME, InfiniBucketWater.getLoreString(), BUTTON_LORE);
+        ItemStack lavaButton = InfiniBucket.AddMeta(new ItemStack(Material.LAVA_BUCKET, 1), InfiniLava.NAME, InfiniLava.getLoreString(), BUTTON_LORE);
+        ItemStack waterButton = InfiniBucket.AddMeta(new ItemStack(Material.WATER_BUCKET, 1), InfiniWater.NAME, InfiniWater.getLoreString(), BUTTON_LORE);
 
         for (int i = 0; i < inventSize; i++) {
             switch (i) {
@@ -74,14 +74,14 @@ public class BucketMenu implements Listener {
         lavaBucket = Main.lava.CreateInstance();
         waterBucket = Main.water.CreateInstance();
 
-        if(item.getItemMeta().getDisplayName().equals(InfiniBucketLava.NAME)){
+        if(item.getItemMeta().getDisplayName().equals(InfiniLava.NAME)){
             if(!player.getInventory().contains(lavaBucket)){
                 ReplaceBucket(player, emptyBucket, lavaBucket);
             }
             else{
                 Main.SendPlayerMessage(player, ChatColor.RED + "A strange force prevents your from creating another" + ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava" + ChatColor.RED + " so close to the one in your inventory.");
             }
-        }else if (item.getItemMeta().getDisplayName().equals(InfiniBucketWater.NAME)){
+        }else if (item.getItemMeta().getDisplayName().equals(InfiniWater.NAME)){
             if(!player.getInventory().contains(waterBucket)) {
                 ReplaceBucket(player, emptyBucket, waterBucket);
             }
