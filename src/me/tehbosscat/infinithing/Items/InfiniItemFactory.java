@@ -1,33 +1,56 @@
 package me.tehbosscat.infinithing.Items;
 
-import me.tehbosscat.infinithing.Items.Buckets.InfiniBucket;
-import me.tehbosscat.infinithing.Items.Buckets.InfiniLava;
-import me.tehbosscat.infinithing.Items.Buckets.InfiniMilk;
-import me.tehbosscat.infinithing.Items.Buckets.InfiniWater;
-import me.tehbosscat.infinithing.Items.Other.InfiniPearl;
-
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 public class InfiniItemFactory {
     private static InfiniItemFactory INSTANCE;
 
-    private InfiniItem EMPTY;
-    private InfiniItem LAVA;
-    private InfiniItem MILK;
-    private InfiniItem WATER;
-
-    private InfiniItem PEARL;
+    private InfiniItem empty;
+    private InfiniItem lava;
+    private InfiniItem milk;
+    private ThrownInfiniItem pearl;
+    private InfiniItem water;
 
 
     private InfiniItemFactory(){
-        // InfiniBucket items.
-        EMPTY = InfiniBucket.GetInstance();
-        LAVA = InfiniLava.GetInstance();
-        MILK = InfiniMilk.GetInstance();
-        WATER = InfiniWater.GetInstance();
+        empty = new InfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Bucket",
+                Material.BUCKET,
+                "infini.bucket",
+                "empty"
+        );
 
-        // Other items.
-        PEARL = InfiniPearl.GetInstance();
+        lava = new InfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava",
+                Material.LAVA_BUCKET,
+                "infini.bucket",
+                "lava"
+        );
+
+        milk = new InfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Milk",
+                Material.MILK_BUCKET,
+                "infini.bucket",
+                "milk"
+        );
+
+        pearl = new ThrownInfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Pearl",
+                Material.ENDER_PEARL,
+                EntityType.ENDER_PEARL,
+                "infini.pearl",
+                "pearl"
+        );
+
+        water = new InfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water",
+                Material.LAVA_BUCKET,
+                "infini.bucket",
+                "water"
+        );
     }
 
     public static InfiniItemFactory GetInstance(){
@@ -38,33 +61,35 @@ public class InfiniItemFactory {
         return INSTANCE;
     }
 
-    public ItemStack CreateItem(String type){
-        type = type.toLowerCase();
-
+    public InfiniItem GetItem(String type){
         switch (type){
             case "empty":
-                return EMPTY.CreateItem();
+                return empty;
 
             case "lava":
-                return LAVA.CreateItem();
+                return lava;
 
             case "milk":
-                return MILK.CreateItem();
+                return milk;
 
             case "pearl":
-                return PEARL.CreateItem();
+                return pearl;
 
             case "water":
-                return WATER.CreateItem();
+                return water;
 
             default:
                 return null;
         }
     }
 
-    public ItemStack CreateItem(InfiniItem type){
-        return type.CreateItem();
+    public ItemStack CreateItem(String type){
+        InfiniItem item = GetItem(type);
+
+        return (item != null) ? item.CreateItem() : null;
     }
 
-
+    public ItemStack CreateItem(InfiniItem type){
+        return (type != null) ? type.CreateItem() : null;
+    }
 }

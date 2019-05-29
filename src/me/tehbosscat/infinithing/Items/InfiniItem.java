@@ -9,27 +9,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
-public abstract class InfiniItem {
-    protected static InfiniItem INSTANCE;
+public class InfiniItem {
+    protected final String NAME;
+    protected String LORE;
+    protected double PRICE;
 
-    private String NAME;
-    private String LORE;
-    private double PRICE;
+    protected final Material MATERIAL;
+    protected final String PERMISSION_PATH;
+    protected final String CONFIG_PATH;
 
-    private Material MATERIAL;
-    private String LORE_PATH;
-    private String PRICE_PATH;
-
-    protected InfiniItem(String name, Material material, String lorePath, String pricePath){
+    public InfiniItem(String name, Material material, String permissionPath, String configPath){
         NAME = name;
         MATERIAL = material;
-        LORE_PATH = lorePath;
-        PRICE_PATH = pricePath;
+        PERMISSION_PATH = permissionPath;
+        CONFIG_PATH = configPath;
+
+        UpdateLoreString();
+        UpdatePrice();
     }
 
 
     public String GetName(){
         return NAME;
+    }
+
+    public Material GetMaterial(){
+        return MATERIAL;
     }
 
     public String GetLoreString(){
@@ -40,35 +45,48 @@ public abstract class InfiniItem {
         return PRICE;
     }
 
+    public String GetPermissionPath(){
+        return PERMISSION_PATH;
+    }
+
+    public String GetConfigPath(){
+        return CONFIG_PATH;
+    }
+
 
     public void UpdateLoreString(){
-        LORE = Main.config.getString(LORE_PATH);
+        String path = CONFIG_PATH + ".lore";
+
+        LORE = Main.config.getString(path);
     }
 
     public void UpdatePrice(){
+        String path = CONFIG_PATH + ".use-cost";
+
         try{
-            PRICE =  Main.config.getDouble(PRICE_PATH);
+            PRICE =  Main.config.getDouble(path);
+
         }catch (Exception e){
-            Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + PRICE_PATH + " in config.yml is wrong type, try float.");
+            Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + path + " in config.yml is wrong type, try float.");
             PRICE = 0;
         }
     }
 
 
-    protected ItemStack CreateItem(){
+    public ItemStack CreateItem(){
         ItemStack item = new ItemStack(MATERIAL, 1);
-        return AddMeta(item, NAME, LORE, PRICE);
+        return AddMeta(item);
     }
 
-    private ItemStack AddMeta(ItemStack item, String name, String loreString, double price){
+    private ItemStack AddMeta(ItemStack item){
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName(name);
+        meta.setDisplayName(NAME);
         ArrayList<String> lore = new ArrayList<>();
-        lore.add(loreString);
+        lore.add(LORE);
 
-        if (price > 0){
-            lore.add("Costs " + ChatColor.ITALIC + ChatColor.GREEN + "$" + price + ChatColor.DARK_PURPLE + " per use.");
+        if (PRICE > 0){
+            lore.add("Costs " + ChatColor.ITALIC + ChatColor.GREEN + "$" + PRICE + ChatColor.DARK_PURPLE + " per use.");
         }
 
         meta.setLore(lore);
@@ -77,5 +95,4 @@ public abstract class InfiniItem {
 
         return item;
     }
-
 }

@@ -1,41 +1,70 @@
-bucket:
+empty:
+  lore: "A bucket with unlimited power."
+  use-cost: 0
+
   options:
+    enabled: true
+
     spawning:
       craftable: false
       spawnable: true
       spawn-cost-enabled: false
       spawn-cost: 1000
 
-  types:
-    empty:
-      lore: "A bucket with unlimited power."
-      use-cost: 0
 
-    lava:
-      enabled: true
-      lore: "An infinite source of lava."
-      use-cost: 100
+lava:
+  lore: "An infinite source of lava."
+  use-cost: 100
 
-    water:
-      enabled: true
-      lore: "An infinite source of water."
-      use-cost: 10
+  options:
+    enabled: true
 
-    milk:
-      enabled: false
-      lore: "An infinite source of malk."
-      use-cost: 1000
+    spawning:
+      craftable: false
+      spawnable: true
+      spawn-cost-enabled: false
+      spawn-cost: 1000
+
+milk:
+  lore: "An infinite source of malk."
+  use-cost: 1000
+
+  options:
+    enabled: false
+
+    spawning:
+      craftable: false
+      spawnable: true
+      spawn-cost-enabled: false
+      spawn-cost: 1000
+
+water:
+  enabled: true
+  lore: "An infinite source of water."
+  use-cost: 10
+
+  options:
+    enabled: true
+    spawning:
+      craftable: false
+      spawnable: true
+      spawn-cost-enabled: false
+      spawn-cost: 1000
+
 
 pearl:
   lore: "An ender pearl with infinite uses."
   use-cost: 100
 
-  spawning:
-    craftable: false
-    spawnable: true
-    spawn-cost-enabled: false
-    spawn-cost: 15000
+  options:
+    enabled: true
 
-  cooldown:
-    cooldown-enabled: true
-    time: 5
+    cooldown:
+      cooldown-enabled: true
+      time: 5
+
+    spawning:
+      craftable: false
+      spawnable: true
+      spawn-cost-enabled: false
+      spawn-cost: 15000
