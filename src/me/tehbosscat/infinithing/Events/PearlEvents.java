@@ -1,8 +1,7 @@
 package me.tehbosscat.infinithing.Events;
 
-import me.tehbosscat.infinithing.Items.InfiniItem;
 import me.tehbosscat.infinithing.Items.InfiniItemFactory;
-import me.tehbosscat.infinithing.Items.Other.InfiniPearl;
+import me.tehbosscat.infinithing.Items.ThrownInfiniItem;
 import me.tehbosscat.infinithing.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -49,29 +48,29 @@ public class PearlEvents implements Listener {
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event){
         Projectile entity = event.getEntity();
-        InfiniItem infPearl = InfiniPearl.GetInstance();
+        ThrownInfiniItem type = (ThrownInfiniItem) f.GetItem("pearl");
 
         if(entity.getShooter() instanceof Player){
             Player player = (Player) entity.getShooter();
-            if(player.getItemInHand().getItemMeta().getDisplayName().equals(infPearl.GetName()) && entity.getName().equals("entity.ThrownEnderpearl.name")){
-                if(player.hasPermission("infini.pearl.use")){
-                    if(Main.config.getBoolean("pearl.cooldown.cooldown-enabled")){
+            if(player.getItemInHand().getItemMeta().getDisplayName().equals(type.GetName()) && entity.getType().equals(type.GetEntityType())){
+                if(player.hasPermission(type.GetPermissionPath() + ".use")){
+                    if(Main.config.getBoolean(type.GetConfigPath() + ".cooldown.cooldown-enabled")){
                         if(!cooldown.containsKey(player.getUniqueId())){
-                            InfiniPearlLaunched(event, player);
+                            InfiniPearlLaunched(event, player, type);
 
                         }else{
                             long secondsLeft = (cooldown.get(player.getUniqueId()) / 1000) + COOLDOWN_TIME - (System.currentTimeMillis() / 1000);
                             if(secondsLeft < 1){
-                                InfiniPearlLaunched(event, player);
+                                InfiniPearlLaunched(event, player, type);
 
                             }else{
-                                Main.SendPlayerMessage(player,"The "+ ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Pearl is cooling down. Cooldown: " + secondsLeft);
+                                Main.SendPlayerMessage(player,"The " + type.GetName() + " is cooling down. Cooldown: " + secondsLeft);
                                 event.setCancelled(true);
                             }
                         }
 
                     }else{
-                        InfiniPearlLaunched(event, player);
+                        InfiniPearlLaunched(event, player, type);
                     }
 
                 }else{
@@ -79,15 +78,13 @@ public class PearlEvents implements Listener {
                     event.setCancelled(true);
                 }
 
-                player.getInventory().addItem(f.CreateItem("pearl"));
-            }else{
-                Main.SendPlayerMessage(player,"Test");
+                player.getInventory().addItem(f.CreateItem(type));
             }
         }
     }
 
-    private void InfiniPearlLaunched(ProjectileLaunchEvent event, Player player){
-        double cost = InfiniPearl.GetInstance().GetPrice();
+    private void InfiniPearlLaunched(ProjectileLaunchEvent event, Player player, ThrownInfiniItem type){
+        double cost = type.GetPrice();
 
         if (Main.economy.has(player, cost)){
             Main.economy.withdrawPlayer(player, cost);
