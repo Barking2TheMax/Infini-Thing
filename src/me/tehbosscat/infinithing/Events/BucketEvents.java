@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,9 +22,8 @@ public class BucketEvents implements Listener {
 
 
     private BucketEvents(){
-        InfiniItemFactory f = InfiniItemFactory.GetInstance();
+        f = InfiniItemFactory.GetInstance();
     }
-
 
     public static BucketEvents GetInstance() {
         if(INSTANCE == null){
@@ -34,51 +34,49 @@ public class BucketEvents implements Listener {
     }
 
     @EventHandler
-    public void onPlayerBucketEmptyEvent (PlayerBucketEmptyEvent event){
-        InfiniItem type;
-        ItemStack item;
-        ItemStack water = f.CreateItem("water");
-        ItemStack lava = f.CreateItem("lava");
-
+    public void onPlayerInteract(PlayerInteractEvent event){
         player = event.getPlayer();
-        playerItem = player.getItemInHand();
+        playerItem = event.getItem();
 
-        if(playerItem.equals(water)){
-            type = f.GetItem("water");
-            item = water;
+        if(playerItem  == null) return;
 
-        }else if(playerItem.equals(lava)) {
-            type = f.GetItem("lava");
-            item = lava;
+        InfiniItem type = f.GetItem("empty");
 
-        } else{
-            type = f.GetItem("milk");
-            item = f.CreateItem("milk");
-        }
-
-        if(player.hasPermission(type.GetPermissionPath() + ".use")){
-            UseInfiniBucket(player, event, item, type.GetPrice());
-
-        }else{
-            Main.SendPlayerMessage(player, "You don't know how to use this item.");
-            event.setCancelled(true);
+        if (event.getItem().equals(f.CreateItem(type))) {
+            if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
+                Main.bucketMenu.Show(player);
+                event.setCancelled(true);
+            }
         }
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event){
-        InfiniItem type = f.GetItem("empty");
-
+    public void onPlayerItemConsume(PlayerItemConsumeEvent event){
         player = event.getPlayer();
-        playerItem = event.getItem();
+        playerItem = player.getItemInHand();
 
+        ItemStack milk = f.CreateItem("milk");
 
-        if (event.getItem().equals(f.CreateItem(type))) {
-            if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
-                new BucketMenu().newBucketMenu(player);
-                event.setCancelled(true);
-            }
+        if(playerItem.equals(milk)){
+            DrinkInfiniMilk(player, event, f.GetItem("milk"));
         }
+    }
+
+    @EventHandler
+    public void onPlayerBucketEmptyEvent (PlayerBucketEmptyEvent event){
+        player = event.getPlayer();
+        playerItem = player.getItemInHand();
+        ItemStack water = f.CreateItem("water");
+        ItemStack lava = f.CreateItem("lava");
+
+        if(playerItem.equals(water)){
+            UseInfiniBucket(player, event, f.GetItem("water"));
+
+        }else if(playerItem.equals(lava)) {
+            UseInfiniBucket(player, event, f.GetItem("lava"));
+        }
+
+
     }
 
     @EventHandler
@@ -86,14 +84,29 @@ public class BucketEvents implements Listener {
         player = event.getPlayer();
         playerItem = player.getItemInHand();
 
+        ItemStack eventItem = event.getItemStack();
+
         if(playerItem.equals(f.CreateItem("empty"))){
-            if (event.getItemStack().getType().equals(Material.LAVA_BUCKET)){
+            if (eventItem.getType().equals(Material.LAVA_BUCKET)){
                 FillInfiniBucket(player, event, f.GetItem("lava"));
 
-            }else if(event.getItemStack().getType().equals(Material.WATER_BUCKET)){
+            }else if(eventItem.getType().equals(Material.WATER_BUCKET)){
                 FillInfiniBucket(player, event, f.GetItem("water"));
+
+            }else if(eventItem.getType().equals(Material.MILK_BUCKET)){
+                FillInfiniBucket(player, event, f.GetItem("milk"));
             }
         }
+    }
+
+    @EventHandler
+    public void onPlayerItemPickUp(PlayerPickupItemEvent event){
+
+    }
+
+    @EventHandler
+    public void onInventoryMoveItem(InventoryMoveItemEvent event){
+
     }
 
     @EventHandler
@@ -101,24 +114,37 @@ public class BucketEvents implements Listener {
         player = event.getPlayer();
         playerItem = event.getItemDrop().getItemStack();
 
-        ItemStack WATER = f.CreateItem("water");
-        ItemStack LAVA = f.CreateItem("lava");
+        ItemStack lava = f.CreateItem("lava");
+        ItemStack milk = f.CreateItem("milk");
+        ItemStack water = f.CreateItem("water");
 
-        if (playerItem.equals(WATER) || playerItem.equals(LAVA)) {
+        if (playerItem.equals(lava) || playerItem.equals(milk) || playerItem.equals(water)) {
             event.getItemDrop().remove();
             player.getInventory().addItem(f.CreateItem("empty"));
         }
     }
 
+    private void DrinkInfiniMilk(Player player, PlayerItemConsumeEvent event, InfiniItem type){
 
-    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, ItemStack type, double cost){
-        if (Main.economy.has(player, cost)) {
-            event.setItemStack(type);
-            Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + cost + ChatColor.WHITE + " has been charged to your account.");
-            Main.economy.withdrawPlayer(player, cost);
+    }
 
-        } else {
-            Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient funds.");
+
+    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, InfiniItem type){
+        double useCost = type.GetPrice();
+
+        if(player.hasPermission(type.GetPermissionPath() + ".use")){
+            if (Main.economy.has(player, useCost)) {
+                event.setItemStack(f.CreateItem(type));
+                Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + useCost + ChatColor.WHITE + " has been charged to your account.");
+                Main.economy.withdrawPlayer(player, useCost);
+
+            } else {
+                Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient funds.");
+                event.setCancelled(true);
+            }
+
+        }else{
+            Main.SendPlayerMessage(player, "You don't know how to use this item.");
             event.setCancelled(true);
         }
     }
