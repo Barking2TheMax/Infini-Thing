@@ -8,23 +8,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 public class Menu implements Listener {
     private String TITLE;
     private MenuItem[] menuItems;
-    private final Material EMPTY_SLOT;
+    private final MenuItem EMPTY_SLOT;
 
 
-    public Menu(String init_title){
+    public Menu(Plugin plugin, String init_title, int rows){
         TITLE = init_title;
-        menuItems = new MenuItem[9];
-        EMPTY_SLOT = Material.AIR;
+        EMPTY_SLOT = new MenuItem(Material.AIR);
+        menuItems = InitialiseMenuItems(rows);
+
+        Main.pluginManager.registerEvents(this, plugin);
     }
 
-    public Menu(String init_title, int rows, Material emptySlot){
+    public Menu(Plugin plugin, String init_title, int rows, Material emptySlot){
         TITLE = init_title;
-        menuItems = new MenuItem[rows * 9];
-        EMPTY_SLOT = emptySlot;
+        EMPTY_SLOT = new MenuItem(emptySlot);
+        menuItems = InitialiseMenuItems(rows);
+
+        Main.pluginManager.registerEvents(this, plugin);
     }
 
     public MenuItem GetMenuItem(int index){
@@ -36,7 +41,17 @@ public class Menu implements Listener {
     }
 
     public void RemoveMenuItem(int index){
-        menuItems[index] = new MenuItem(EMPTY_SLOT);
+        menuItems[index] = EMPTY_SLOT;
+    }
+
+    private MenuItem[] InitialiseMenuItems(int rows){
+        MenuItem[] array = new MenuItem[rows * 9];
+
+        for (int i = 0; i < array.length; i++) {
+            array[i] = EMPTY_SLOT;
+        }
+
+        return array;
     }
 
 

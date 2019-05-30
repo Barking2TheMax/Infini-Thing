@@ -1,6 +1,5 @@
 package me.tehbosscat.infinithing.Menus.BaseMenu;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 public class MenuItem {
     private String text;
     private ArrayList<String> subText;
-    private Material material;
+    protected Material material;
     private int num;
     private I_OnClickBehaviour onClickAction;
 
