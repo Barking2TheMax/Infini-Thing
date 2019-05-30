@@ -1,3 +1,5 @@
+# Infini-Buckets items.
+# Infini-Bucket config.
 empty:
   lore: "A bucket with unlimited power."
   use-cost: 0
@@ -11,7 +13,7 @@ empty:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
-
+# Infini-Lava config.
 lava:
   lore: "An infinite source of lava."
   use-cost: 100
@@ -25,6 +27,7 @@ lava:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
+# Infini-Milk config.
 milk:
   lore: "An infinite source of malk."
   use-cost: 1000
@@ -38,6 +41,8 @@ milk:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
+# Other items.
+# Infini-Pearl config.
 water:
   enabled: true
   lore: "An infinite source of water."
@@ -51,7 +56,7 @@ water:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
-
+# Infini-Pearl config.
 pearl:
   lore: "An ender pearl with infinite uses."
   use-cost: 100
