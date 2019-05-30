@@ -1,5 +1,6 @@
 package me.tehbosscat.infinithing.Items;
 
+import me.tehbosscat.infinithing.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -47,7 +48,7 @@ public class InfiniItemFactory {
 
         water = new InfiniItem(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water",
-                Material.LAVA_BUCKET,
+                Material.WATER_BUCKET,
                 "infini.bucket",
                 "water"
         );
@@ -79,6 +80,7 @@ public class InfiniItemFactory {
                 return water;
 
             default:
+                Main.SendConsoleMessage(ChatColor.RED + "GetItem type not recognised.");
                 return null;
         }
     }
