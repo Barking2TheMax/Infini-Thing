@@ -41,8 +41,8 @@ milk:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
-# Other items.
-# Infini-Pearl config.
+
+# Infini-Water config.
 water:
   enabled: true
   lore: "An infinite source of water."
@@ -56,6 +56,8 @@ water:
       spawn-cost-enabled: false
       spawn-cost: 1000
 
+
+# Other items.
 # Infini-Pearl config.
 pearl:
   lore: "An ender pearl with infinite uses."
