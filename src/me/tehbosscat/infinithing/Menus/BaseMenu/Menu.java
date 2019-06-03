@@ -54,7 +54,6 @@ public class Menu implements Listener {
         return array;
     }
 
-
     public void Show(Player player){
         int length = menuItems.length;
         Inventory menu = Main.server.createInventory(null, length, TITLE);

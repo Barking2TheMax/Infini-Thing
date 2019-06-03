@@ -4,6 +4,7 @@ import me.tehbosscat.infinithing.Items.InfiniItemFactory;
 import me.tehbosscat.infinithing.Menus.BaseMenu.I_OnClickBehaviour;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class WaterButtonBehaviour implements I_OnClickBehaviour {
 
@@ -11,12 +12,22 @@ public class WaterButtonBehaviour implements I_OnClickBehaviour {
         InfiniItemFactory f = InfiniItemFactory.GetInstance();
         Inventory inventory = player.getInventory();
 
+        ItemStack emptyBucket = f.CreateItem("empty");
+        ItemStack waterBucket = f.CreateItem("water");
+
         for (int i = 0; i < inventory.getSize(); i++) {
-            if (inventory.getContents()[i].equals(f.CreateItem("empty"))){
-                inventory.setItem(i , f.CreateItem("water"));
-                break;
+            ItemStack itemStack = inventory.getItem(i);
+
+            if (itemStack == null) continue;
+
+            if (itemStack.isSimilar(emptyBucket)){
+                itemStack.setAmount(itemStack.getAmount() - 1);
+                inventory.setItem(i , itemStack);
+                inventory.addItem(waterBucket);
+                return true;
             }
         }
-        return true;
+
+        return false;
     }
 }
