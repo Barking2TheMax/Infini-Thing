@@ -59,6 +59,33 @@ public class InfiniItem {
         return PRICE;
     }
 
+    public double GetSpawnPrice(){
+        boolean enabled;
+        try{
+            enabled = Main.config.getBoolean(CONFIG_PATH + "spawn-cost-enabled");
+
+        }catch (Exception e){
+            Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + CONFIG_PATH + ".options.spawning.spawn-cost in config.yml is wrong type, try float.");
+            enabled = false;
+        }
+
+        double spawnCost;
+        if (enabled){
+            try{
+                spawnCost = Main.config.getDouble(CONFIG_PATH + ".options.spawning.spawn-cost");
+
+            }catch (Exception e){
+                Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + CONFIG_PATH + ".options.spawning.spawn-cost in config.yml is wrong type, try float.");
+                spawnCost  = 0;
+            }
+        }
+        else {
+            spawnCost = 0;
+        }
+
+        return spawnCost;
+    }
+
     public String GetPermissionPath(){
         return PERMISSION_PATH;
     }
@@ -128,13 +155,7 @@ public class InfiniItem {
 
         if(Main.config.getBoolean(configPath + ".options.spawning.spawnable")){
             if(Main.config.getBoolean(configPath + ".options.spawning.spawn-cost-enabled")){
-                try{
-                    spawnCost = Main.config.getDouble(configPath + ".options.spawning.spawn-cost");
-
-                }catch (Exception e){
-                    Main.SendConsoleMessage(ChatColor.RED + "Error: " + ChatColor.GRAY + configPath + ".options.spawning.spawn-cost in config.yml is wrong type, try float.");
-                    spawnCost  = 0;
-                }
+                spawnCost = item.GetSpawnPrice();
 
             }else{
                 spawnCost  = 0;
@@ -177,7 +198,7 @@ public class InfiniItem {
         lore.add(LORE);
 
         if (PRICE > 0){
-            lore.add("Costs " + ChatColor.GREEN + "$" + PRICE + ChatColor.DARK_PURPLE + " per use.");
+            lore.add("Costs " + ChatColor.GREEN + "$" + PRICE + ChatColor.DARK_PURPLE + ChatColor.ITALIC + " per use.");
         }
 
         lore.addAll(_additionalLore);

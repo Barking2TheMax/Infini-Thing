@@ -6,8 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-
 public class InfiniItemFactory {
     private static InfiniItemFactory INSTANCE;
 
@@ -25,9 +23,9 @@ public class InfiniItemFactory {
                 "infini.bucket",
                 "empty"
         );
-        empty.AddAdditionalLore("Left click to change bucket type.");
+        empty.AddAdditionalLore(ChatColor.RESET + "Left click to change bucket type.");
 
-        String changeLore = "Throw on the floor to return it's potential.";
+        String changeLore = (ChatColor.RESET + "Throw on the floor to return it's potential.");
 
         lava = new InfiniItem(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava",
