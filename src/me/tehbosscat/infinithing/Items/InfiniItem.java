@@ -4,7 +4,6 @@ import me.tehbosscat.infinithing.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -12,13 +11,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class InfiniItem {
-    protected final String NAME;
-    protected String LORE;
-    protected double PRICE;
+    private final String NAME;
+    private String LORE;
+    private double PRICE;
+    private ArrayList<String> _additionalLore;
 
-    protected final Material MATERIAL;
-    protected final String PERMISSION_PATH;
-    protected final String CONFIG_PATH;
+    private final Material MATERIAL;
+    private final String PERMISSION_PATH;
+    private final String CONFIG_PATH;
 
     public InfiniItem(String name, Material material, String permissionPath, String configPath){
         NAME = name;
@@ -26,6 +26,18 @@ public class InfiniItem {
         PERMISSION_PATH = permissionPath;
         CONFIG_PATH = configPath;
 
+        _additionalLore = new ArrayList<>();
+        UpdateLoreString();
+        UpdatePrice();
+    }
+
+    public InfiniItem(String name, Material material, String permissionPath, String configPath, ArrayList<String> additionalLore){
+        NAME = name;
+        MATERIAL = material;
+        PERMISSION_PATH = permissionPath;
+        CONFIG_PATH = configPath;
+
+        _additionalLore = additionalLore;
         UpdateLoreString();
         UpdatePrice();
     }
@@ -55,6 +67,30 @@ public class InfiniItem {
         return CONFIG_PATH;
     }
 
+    public String GetAdditionalLore(){
+        return _additionalLore.get(_additionalLore.size() - 1);
+    }
+
+    public String GetAdditionalLore(int index){
+        return _additionalLore.get(index);
+    }
+
+    public void AddAdditionalLore(String lore){
+        _additionalLore.add(lore);
+    }
+
+    public String RemoveAdditionalLore(){
+        int index = _additionalLore.size() - 1;
+
+        return RemoveAdditionalLore(index);
+    }
+
+    public String RemoveAdditionalLore(int index){
+        String lore = _additionalLore.get(index);
+        _additionalLore.remove(index);
+
+        return lore;
+    }
 
     public void UpdateLoreString(){
         String path = CONFIG_PATH + ".lore";
@@ -143,6 +179,8 @@ public class InfiniItem {
         if (PRICE > 0){
             lore.add("Costs " + ChatColor.GREEN + "$" + PRICE + ChatColor.DARK_PURPLE + " per use.");
         }
+
+        lore.addAll(_additionalLore);
 
         meta.setLore(lore);
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);

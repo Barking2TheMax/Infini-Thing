@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 public class InfiniItemFactory {
     private static InfiniItemFactory INSTANCE;
 
@@ -23,6 +25,9 @@ public class InfiniItemFactory {
                 "infini.bucket",
                 "empty"
         );
+        empty.AddAdditionalLore("Left click to change bucket type.");
+
+        String changeLore = "Throw on the floor to return it's potential.";
 
         lava = new InfiniItem(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Lava",
@@ -30,6 +35,7 @@ public class InfiniItemFactory {
                 "infini.bucket",
                 "lava"
         );
+        lava.AddAdditionalLore(changeLore);
 
         milk = new InfiniItem(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Milk",
@@ -37,6 +43,15 @@ public class InfiniItemFactory {
                 "infini.bucket",
                 "milk"
         );
+        milk.AddAdditionalLore(changeLore);
+
+        water = new InfiniItem(
+                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water",
+                Material.WATER_BUCKET,
+                "infini.bucket",
+                "water"
+        );
+        water.AddAdditionalLore(changeLore);
 
         pearl = new ThrownInfiniItem(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Pearl",
@@ -44,13 +59,6 @@ public class InfiniItemFactory {
                 EntityType.ENDER_PEARL,
                 "infini.pearl",
                 "pearl"
-        );
-
-        water = new InfiniItem(
-                ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Water",
-                Material.WATER_BUCKET,
-                "infini.bucket",
-                "water"
         );
     }
 
