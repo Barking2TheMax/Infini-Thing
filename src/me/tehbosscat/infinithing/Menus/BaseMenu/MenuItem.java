@@ -9,38 +9,74 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class MenuItem {
+
+    public static class Builder{
+        private String _text;
+        private ArrayList<String> _subText;
+        private Material _material;
+        private int _materialByte;
+        private int _num;
+        private I_OnClickBehaviour _onClickAction;
+
+        public Builder(Material material){
+           _material = material;
+        }
+
+        public Builder Text(String text){
+            _text = text;
+
+            return this;
+        }
+
+        public Builder SubText(String subText){
+            if (_subText == null){
+                _subText = new ArrayList<String>();
+            }
+
+            _subText.add(subText);
+
+            return this;
+        }
+
+        public Builder MaterialByte(int materialByte){
+            _materialByte = materialByte;
+
+            return this;
+        }
+
+        public Builder Num(int num){
+            _num = num;
+
+            return this;
+        }
+
+        public Builder Action(I_OnClickBehaviour action){
+            _onClickAction = action;
+
+            return this;
+        }
+
+        public MenuItem build(){
+            MenuItem item = new MenuItem();
+            item.text = _text == null ? "" : _text;
+            item.subText = _subText == null ? new ArrayList<>() : _subText;
+            item.material = _material;
+            item.materialByte = _materialByte;
+            item.num = _num == 0 ? 1 : _num;
+            item.onClickAction = _onClickAction;
+
+            return item;
+        }
+    }
+
     private String text;
     private ArrayList<String> subText;
-    protected Material material;
+    private Material material;
+    private int materialByte;
     private int num;
     private I_OnClickBehaviour onClickAction;
 
-
-    public MenuItem(Material init_material){
-        text = "";
-        subText = new ArrayList<>();
-        material = init_material;
-        num = 1;
-        onClickAction = new NullClick();
-    }
-
-    public MenuItem(String init_text, Material init_material, int init_num){
-        text = init_text;
-        subText = new ArrayList<>();
-        material = init_material;
-        num = init_num;
-        onClickAction = new NullClick();
-    }
-
-    public MenuItem(String init_text, String init_subText, Material init_material, int init_num){
-        text = init_text;
-        subText = new ArrayList<>();
-        subText.add(init_subText);
-        material = init_material;
-        num = init_num;
-        onClickAction = new NullClick();
-    }
-
+    private MenuItem(){ }
 
     public String GetText(){
         return text;
@@ -72,6 +108,10 @@ public class MenuItem {
         subText.add(string);
     }
 
+    public int GetNum(){
+        return num;
+    }
+
     public void SetNum(int integer){
         num = integer;
     }
@@ -84,15 +124,13 @@ public class MenuItem {
         num--;
     }
 
-    public void AddOnClick(I_OnClickBehaviour behaviour){
-        onClickAction = behaviour;
-    }
 
     public ItemStack CreateItem(){
         if(material == Material.AIR){
             return null;
+
         }else{
-            ItemStack item = new ItemStack(material, num);
+            ItemStack item = new ItemStack(material, num, (byte) materialByte);
             return AddMeta(item);
         }
     }

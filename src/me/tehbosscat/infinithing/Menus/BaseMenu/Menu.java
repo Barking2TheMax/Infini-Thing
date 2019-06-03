@@ -8,7 +8,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public class Menu implements Listener {
     private String TITLE;
@@ -16,20 +15,23 @@ public class Menu implements Listener {
     private final MenuItem EMPTY_SLOT;
 
 
-    public Menu(Plugin plugin, String init_title, int rows){
+    public Menu(String init_title, int rows){
         TITLE = init_title;
-        EMPTY_SLOT = new MenuItem(Material.AIR);
+        EMPTY_SLOT = new MenuItem.Builder(Material.AIR)
+                .build();
         menuItems = InitialiseMenuItems(rows);
 
-        Main.pluginManager.registerEvents(this, plugin);
+        Main.pluginManager.registerEvents(this, Main.plugin);
     }
 
-    public Menu(Plugin plugin, String init_title, int rows, Material emptySlot){
+    public Menu(String init_title, int rows, Material emptySlot, int materialByte){
         TITLE = init_title;
-        EMPTY_SLOT = new MenuItem(emptySlot);
+        EMPTY_SLOT = new MenuItem.Builder(emptySlot)
+                .MaterialByte(materialByte)
+                .build();
         menuItems = InitialiseMenuItems(rows);
 
-        Main.pluginManager.registerEvents(this, plugin);
+        Main.pluginManager.registerEvents(this, Main.plugin);
     }
 
     public MenuItem GetMenuItem(int index){
@@ -65,6 +67,18 @@ public class Menu implements Listener {
         player.openInventory(menu);
     }
 
+    public boolean ItemInMenuItems(ItemStack item){
+        for (MenuItem menuItem : menuItems) {
+            if(menuItem.equals(EMPTY_SLOT)) continue;
+
+            if (menuItem.CreateItem().equals(item)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event){
         Player player = (Player) event.getWhoClicked();
@@ -76,7 +90,7 @@ public class Menu implements Listener {
         event.setCancelled(true);
         ItemStack item = event.getCurrentItem();
 
-        if(item == null || !item.hasItemMeta()) return;
+        if(item == null || !ItemInMenuItems(item)) return;
 
         menuItems[event.getSlot()].OnClickAction(player);
 

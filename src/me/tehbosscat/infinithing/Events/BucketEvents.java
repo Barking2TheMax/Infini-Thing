@@ -3,6 +3,11 @@ package me.tehbosscat.infinithing.Events;
 import me.tehbosscat.infinithing.Items.InfiniItem;
 import me.tehbosscat.infinithing.Items.InfiniItemFactory;
 import me.tehbosscat.infinithing.Main;
+import me.tehbosscat.infinithing.Menus.BaseMenu.I_OnClickBehaviour;
+import me.tehbosscat.infinithing.Menus.BaseMenu.Menu;
+import me.tehbosscat.infinithing.Menus.BaseMenu.MenuItem;
+import me.tehbosscat.infinithing.Menus.BucketMenuBehaviours.LavaButtonBehaviour;
+import me.tehbosscat.infinithing.Menus.BucketMenuBehaviours.WaterButtonBehaviour;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 public class BucketEvents implements Listener {
     private static BucketEvents INSTANCE;
     private InfiniItemFactory f;
+    private Menu menu;
 
     private Player player;
     private ItemStack playerItem;
@@ -23,6 +29,7 @@ public class BucketEvents implements Listener {
 
     private BucketEvents(){
         f = InfiniItemFactory.GetInstance();
+        menu = InitialiseBucketMenu();
     }
 
     public static BucketEvents GetInstance() {
@@ -31,6 +38,36 @@ public class BucketEvents implements Listener {
         }
 
         return INSTANCE;
+    }
+
+    private Menu InitialiseBucketMenu(){
+        InfiniItemFactory f = InfiniItemFactory.GetInstance();
+
+        Menu menu = new Menu(
+                "Select an " + f.GetItem("empty").GetName(),
+                3
+        );
+
+        AddBucketMenuButton(menu, f.GetItem("lava"), new LavaButtonBehaviour(), 12);
+        AddBucketMenuButton(menu, f.GetItem("water"), new WaterButtonBehaviour(), 14);
+
+        return menu;
+    }
+
+    private void AddBucketMenuButton(Menu m, InfiniItem item, I_OnClickBehaviour behaviour, int index){
+        MenuItem button = new MenuItem.Builder(item.GetMaterial())
+                .Text("Select " + item.GetName())
+                .SubText(item.GetLoreString())
+                .Action(behaviour)
+                .build();
+
+        double spawnCost = item.GetSpawnPrice();
+
+        if (spawnCost > 0){
+            button.AddSubText("Costs " + ChatColor.GREEN + "$" + item.GetSpawnPrice() + ChatColor.DARK_PURPLE + ChatColor.ITALIC + " to spawn.");
+        }
+
+        m.UpdateMenuItem(index, button);
     }
 
     @EventHandler
@@ -43,7 +80,7 @@ public class BucketEvents implements Listener {
             InfiniItem type = f.GetItem("empty");
             if (event.getItem().isSimilar(f.CreateItem(type))){
                 if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
-                    Main.bucketMenu.Show(player);
+                    menu.Show(player);
                     event.setCancelled(true);
 
                 }else{
@@ -118,7 +155,6 @@ public class BucketEvents implements Listener {
     private void DrinkInfiniMilk(Player player, PlayerItemConsumeEvent event, InfiniItem type){
 
     }
-
 
     private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, InfiniItem type){
         double useCost = type.GetPrice();
