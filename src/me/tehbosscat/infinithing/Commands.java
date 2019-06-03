@@ -31,13 +31,7 @@ public class Commands extends CommandExecute implements Listener, CommandExecuto
                     switch(index){
                         // Bucket
                         case 0:
-                            InfiniItem item = f.GetItem("empty");
-                            if(!(player.getInventory().contains(f.CreateItem("lava")) || (player.getInventory().contains(f.CreateItem("water"))))){
-                                InfiniItem.ItemSpawnQuery(player, item);
-
-                            }else{
-                                Main.SendPlayerMessage(player,ChatColor.RED +"A strange force prevents your from creating an " + item.GetName() + ChatColor.RED + " so close to the one in your inventory.");
-                            }
+                            InfiniItem.ItemSpawnQuery(player, f.GetItem("empty"));
                             return true;
 
                         // Pearl

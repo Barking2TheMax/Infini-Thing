@@ -8,7 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,13 +39,16 @@ public class BucketEvents implements Listener {
         playerItem = event.getItem();
 
         if(playerItem  == null) return;
+        if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
+            InfiniItem type = f.GetItem("empty");
+            if (event.getItem().isSimilar(f.CreateItem(type))){
+                if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
+                    Main.bucketMenu.Show(player);
+                    event.setCancelled(true);
 
-        InfiniItem type = f.GetItem("empty");
-
-        if (event.getItem().equals(f.CreateItem(type))) {
-            if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
-                Main.bucketMenu.Show(player);
-                event.setCancelled(true);
+                }else{
+                    Main.SendPlayerMessage(player, "You don't know how to use this item.");
+                }
             }
         }
     }
@@ -75,8 +78,6 @@ public class BucketEvents implements Listener {
         }else if(playerItem.equals(lava)) {
             UseInfiniBucket(player, event, f.GetItem("lava"));
         }
-
-
     }
 
     @EventHandler
@@ -86,7 +87,7 @@ public class BucketEvents implements Listener {
 
         ItemStack eventItem = event.getItemStack();
 
-        if(playerItem.equals(f.CreateItem("empty"))){
+        if(playerItem.isSimilar(f.CreateItem("empty"))){
             if (eventItem.getType().equals(Material.LAVA_BUCKET)){
                 FillInfiniBucket(player, event, f.GetItem("lava"));
 
@@ -97,16 +98,6 @@ public class BucketEvents implements Listener {
                 FillInfiniBucket(player, event, f.GetItem("milk"));
             }
         }
-    }
-
-    @EventHandler
-    public void onPlayerItemPickUp(PlayerPickupItemEvent event){
-
-    }
-
-    @EventHandler
-    public void onInventoryMoveItem(InventoryMoveItemEvent event){
-
     }
 
     @EventHandler
@@ -153,18 +144,13 @@ public class BucketEvents implements Listener {
         ItemStack item = f.CreateItem(type);
 
         if (player.hasPermission(type.GetPermissionPath() + ".fill")){
-            if(!player.getInventory().contains(item)){
-                event.setItemStack(item);
-                Main.SendPlayerMessage(player, "You created a " + type.GetName() + ".");
-
-            }else{
-                Main.SendPlayerMessage(player,ChatColor.RED + "You already have an " + type.GetName() + ".");
-                event.setCancelled(true);
-            }
+            player.getInventory().addItem(item);
+            Main.SendPlayerMessage(player, "You created a " + type.GetName() + ".");
 
         }else{
             Main.SendPlayerMessage(player, "You don't know how to create an infinite source contained within a bucket.");
-            event.setCancelled(true);
         }
+
+        event.setCancelled(true);
     }
 }

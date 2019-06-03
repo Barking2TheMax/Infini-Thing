@@ -74,16 +74,12 @@ public class InfiniItem {
         }
     }
 
+
     public static void ItemSpawnQuery(Player player, InfiniItem item){
         InfiniItemFactory f = InfiniItemFactory.GetInstance();
 
         if(player.hasPermission(item.GetPermissionPath() + ".spawn")){
-            if(!player.getInventory().contains(f.CreateItem(item))){
-                SpawnInfiniItem(player, f, item);
-
-            }else{
-                Main.SendPlayerMessage(player,ChatColor.RED +"A strange force prevents your from creating another " + item.GetName() + ChatColor.RED + " so close to the one in your inventory.");
-            }
+            SpawnInfiniItem(player, f, item);
 
         }else{
             Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient permissions to spawn an " + item.GetName());

@@ -38,7 +38,6 @@ public class PearlEvents implements Listener {
         }
     }
 
-
     public static PearlEvents GetInstance() {
         if(INSTANCE == null){
             INSTANCE = new PearlEvents(Main.config);
@@ -52,16 +51,6 @@ public class PearlEvents implements Listener {
     }
 
     @EventHandler
-    public void onPlayerItemPickUp(PlayerPickupItemEvent event){
-
-    }
-
-    @EventHandler
-    public void onInventoryMoveItem(InventoryMoveItemEvent event){
-        
-    }
-
-    @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event){
         Projectile entity = event.getEntity();
         ThrownInfiniItem type = (ThrownInfiniItem) f.GetItem("pearl");
@@ -70,7 +59,7 @@ public class PearlEvents implements Listener {
         if(entity.getShooter() instanceof Player){
             Player player = (Player) entity.getShooter();
 
-            if(player.getItemInHand().equals(item) && entity.getType().equals(type.GetEntityType())){
+            if(player.getItemInHand().isSimilar(item) && entity.getType().equals(type.GetEntityType())){
                 if(player.hasPermission(type.GetPermissionPath() + ".use")){
                     if(Main.config.getBoolean(type.GetConfigPath() + ".options.cooldown.cooldown-enabled")){
                         if(!cooldown.containsKey(player.getUniqueId())){
@@ -97,7 +86,7 @@ public class PearlEvents implements Listener {
                     event.setCancelled(true);
                 }
 
-                player.getInventory().addItem();
+                player.getInventory().addItem(item);
             }
         }
     }
