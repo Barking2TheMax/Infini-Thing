@@ -1,0 +1,60 @@
+name: InfiniThing
+description: A plugin that provides players with an item that has infinite uses, but at a cost.
+version: 1.4.1
+author: BarkerDevelopment
+main: BarkerDevelopment.InfiniThing.Main
+depend: [Vault]
+
+commands:
+  infini:
+    description: Spawns a bucket or pearl if the parameter is entered. If no parameter is entered, opens up a menu to let the player spawn one or the other.
+    aliases: inf
+    usage: |
+      /infini [bucket|pearl]
+      Example: /inf - Open the Infini Menu.
+      Example: /inf bucket - Spawn an Infini Bucket.
+
+permissions:
+  infini.bucket.*:
+    description: Gives access to all InfiniBucket permissions.
+    children:
+      infini.bucket.craft: true
+      infini.bucket.spawn: true
+      infini.bucket.use: true
+      infini.bucket.fill: true
+
+  infini.bucket.craft:
+    description: Allows a player to craft an InfiniBucket.
+    default: notop
+
+  infini.bucket.spawn:
+    description: Allows a player to spawn an InfiniBucket.
+    default: op
+
+  infini.bucket.use:
+    description: Allows a player to use an InfiniBucket.
+    default: op
+
+  infini.bucket.fill:
+    description: Allows a player to fill an InfiniBucket.
+    default: op
+
+
+  infini.pearl.*:
+    description: Gives access to all InfiniPearl permissions.
+    children:
+      infini.pearl.craft: true
+      infini.pearl.spawn: true
+      infini.pearl.use: true
+
+  infini.pearl.craft:
+    description: Allows a player to craft an InfiniPearl.
+    default: notop
+
+  infini.pearl.spawn:
+    description: Allows a player to spawn an InfiniBucket.
+    default: op
+
+  infini.pearl.use:
+     description: Allows a player to use an InfiniBucket.
+     default: op
