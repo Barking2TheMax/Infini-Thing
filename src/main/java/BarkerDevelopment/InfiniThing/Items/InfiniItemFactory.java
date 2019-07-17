@@ -22,6 +22,19 @@ public class InfiniItemFactory {
 
     // Instantiation.
     /**
+     * InfiniItemFactory implements the Singleton design pattern.
+     *
+     * @return The Singleton instance of InfiniItemFactory.
+     */
+    public static InfiniItemFactory GetInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new InfiniItemFactory();
+        }
+
+        return INSTANCE;
+    }
+
+    /**
      * Constructor implementing Singleton design pattern.
      */
     private InfiniItemFactory(){
@@ -66,19 +79,6 @@ public class InfiniItemFactory {
                 "infini.pearl",
                 "pearl"
         );
-    }
-
-    /**
-     * InfiniItemFactory implements the Singleton design pattern.
-     *
-     * @return The Singleton instance of InfiniItemFactory.
-     */
-    public static InfiniItemFactory GetInstance(){
-        if(INSTANCE == null){
-            INSTANCE = new InfiniItemFactory();
-        }
-
-        return INSTANCE;
     }
 
 

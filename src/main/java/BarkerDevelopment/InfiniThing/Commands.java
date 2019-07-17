@@ -7,14 +7,12 @@ import BarkerDevelopment.InfiniThing.Menus.InfiniMenuBehaviours.PearlSpawnButton
 import BarkerDevelopment.MinecraftMenus.Behaviours.CloseButtonBehaviour;
 import BarkerDevelopment.MinecraftMenus.*;
 import BarkerDevelopment.MinecraftMenus.Behaviours.*;
-import net.minecraft.server.v1_8_R3.CommandExecute;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,7 +21,7 @@ import java.util.Arrays;
 /**
  * Handles command execution.
  */
-public class Commands extends CommandExecute implements Listener, CommandExecutor {
+public class Commands implements CommandExecutor {
     private InfiniItemFactory f;
     private Menu menu;
 

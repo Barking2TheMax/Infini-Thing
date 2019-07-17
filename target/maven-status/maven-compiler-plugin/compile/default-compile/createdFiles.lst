@@ -1,0 +1,12 @@
+BarkerDevelopment\InfiniThing\Menus\InfiniMenuBehaviours\BucketSpawnButtonBehaviour.class
+BarkerDevelopment\InfiniThing\Menus\BucketMenuBehaviours\BucketButtonBehaviour.class
+BarkerDevelopment\InfiniThing\Items\InfiniItem.class
+BarkerDevelopment\InfiniThing\Events\BucketEvents.class
+BarkerDevelopment\InfiniThing\Menus\BucketMenuBehaviours\WaterButtonBehaviour.class
+BarkerDevelopment\InfiniThing\Commands.class
+BarkerDevelopment\InfiniThing\Menus\BucketMenuBehaviours\LavaButtonBehaviour.class
+BarkerDevelopment\InfiniThing\Main.class
+BarkerDevelopment\InfiniThing\Items\ThrownInfiniItem.class
+BarkerDevelopment\InfiniThing\Menus\InfiniMenuBehaviours\PearlSpawnButtonBehaviour.class
+BarkerDevelopment\InfiniThing\Items\InfiniItemFactory.class
+BarkerDevelopment\InfiniThing\Events\PearlEvents.class
