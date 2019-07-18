@@ -3,7 +3,7 @@ package BarkerDevelopment.InfiniThing.Items;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-public class ThrownInfiniItem extends InfiniItem {
+public class ThrownInfiniItem extends InfiniItemType {
     // Variables
     private EntityType ENTITY_TYPE;
 

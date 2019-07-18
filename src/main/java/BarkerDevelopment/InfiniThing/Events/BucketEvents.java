@@ -1,7 +1,7 @@
 package BarkerDevelopment.InfiniThing.Events;
 
 import BarkerDevelopment.InfiniThing.Main;
-import BarkerDevelopment.InfiniThing.Items.InfiniItem;
+import BarkerDevelopment.InfiniThing.Items.InfiniItemType;
 import BarkerDevelopment.InfiniThing.Items.InfiniItemFactory;
 import BarkerDevelopment.InfiniThing.Menus.BucketMenuBehaviours.*;
 import BarkerDevelopment.MinecraftMenus.*;
@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 
 
 /**
@@ -90,7 +91,7 @@ public class BucketEvents implements Listener {
 
         if(playerItem  == null) return;
         if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
-            InfiniItem type = f.GetItem("empty");
+            InfiniItemType type = f.GetItem("empty");
             if (event.getItem().isSimilar(f.CreateItem(type))){
                 if (player.hasPermission(type.GetPermissionPath() + ".spawn")) {
                     menu.Show(player);
@@ -113,10 +114,10 @@ public class BucketEvents implements Listener {
         player = event.getPlayer();
         playerItem = player.getItemInHand();
 
-        ItemStack milk = f.CreateItem("milk");
-
-        if(playerItem.equals(milk)){
-            DrinkInfiniMilk(player, event, f.GetItem("milk"));
+        if(playerItem.getType().equals(Material.MILK_BUCKET)){
+            if(playerItem.equals(f.CreateItem("milk"))){
+                DrinkInfiniMilk(player, event);
+            }
         }
     }
 
@@ -137,6 +138,7 @@ public class BucketEvents implements Listener {
 
         }else if(playerItem.equals(lava)) {
             UseInfiniBucket(player, event, f.GetItem("lava"));
+
         }
     }
 
@@ -196,7 +198,7 @@ public class BucketEvents implements Listener {
      *                  NullClick behaviour.
      * @param index The index of the button in the Menu object.
      */
-    private void AddBucketMenuButton(Menu m, InfiniItem item, I_OnClickBehaviour behaviour, int index){
+    private void AddBucketMenuButton(Menu m, InfiniItemType item, I_OnClickBehaviour behaviour, int index){
         MenuItem button = new MenuItem.Builder(item.GetMaterial())
                 .Text("Select " + item.GetName())
                 .SubText(item.GetLoreString())
@@ -220,33 +222,28 @@ public class BucketEvents implements Listener {
      *
      * @param player Player triggering the event.
      * @param event PlayerItemConsumeEvent event.
-     * @param type The type of InfiniItem being consumed.
      */
-    private void DrinkInfiniMilk(Player player, PlayerItemConsumeEvent event, InfiniItem type){
-        if(type.IsEnabled()){
-            double useCost = type.GetPrice();
+    private void DrinkInfiniMilk(Player player, PlayerItemConsumeEvent event){
+        InfiniItemType milk =  f.GetItem("milk");
+        if(milk.IsEnabled()){
+            double useCost = milk.GetPrice();
 
-            if(player.hasPermission(type.GetPermissionPath() + ".use")){
-                if (Main.economy.has(player, useCost)) {
-                    event.setItem(f.CreateItem(type));
-                    if (useCost > 0) {
-                        Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + useCost + ChatColor.WHITE +
-                                " has been charged to your account.");
-                        Main.economy.withdrawPlayer(player, useCost);
+            if(player.hasPermission(milk.GetPermissionPath() + ".use")){
+                if (Main.ChargePlayer(player, useCost)) {
+                    for (PotionEffect effect: player.getActivePotionEffects()) {
+                        player.removePotionEffect(effect.getType());
                     }
-
-                } else {
-                    Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient funds.");
-                    event.setCancelled(true);
                 }
 
             }else{
                 Main.SendPlayerMessage(player, "You don't know how to use this item.");
-                event.setCancelled(true);
             }
+
         }else{
-            Main.SendPlayerMessage(player, type.GetName() + " has been disabled in the config.");
+            Main.SendPlayerMessage(player, milk.GetName() + " has been disabled in the config.");
         }
+
+        event.setCancelled(true);
     }
 
     /**
@@ -257,72 +254,57 @@ public class BucketEvents implements Listener {
      *
      * @param player Player triggering the event.
      * @param event PlayerItemConsumeEvent event.
-     * @param type The type of InfiniItem being used.
+     * @param type The type of InfiniItemType being used.
      */
-    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, InfiniItem type){
+    private void UseInfiniBucket(Player player, PlayerBucketEmptyEvent event, InfiniItemType type){
         if(type.IsEnabled()){
             double useCost = type.GetPrice();
 
             if(player.hasPermission(type.GetPermissionPath() + ".use")){
-                if (Main.economy.has(player, useCost)) {
+                if (Main.ChargePlayer(player, useCost)) {
                     event.setItemStack(f.CreateItem(type));
-                    if (useCost > 0) {
-                        Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + useCost + ChatColor.WHITE +
-                                " has been charged to your account.");
-                        Main.economy.withdrawPlayer(player, useCost);
-                    }
-
-                } else {
-                    Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient funds.");
-                    event.setCancelled(true);
+                    return;
                 }
 
             }else{
                 Main.SendPlayerMessage(player, "You don't know how to use this item.");
-                event.setCancelled(true);
             }
+
         }else{
             Main.SendPlayerMessage(player, type.GetName() + " has been disabled in the config.");
         }
+
+        event.setCancelled(true);
     }
 
     /**
      * A player tries to fill an Infini-Bucket. Only allows them to do so if:
      *      - Infini-Lava and/or Infini-Water is enabled in the config.
      *      - They have permission to fill an Infini-Bucket.
-     *      - They have the money to pay for the use.
+     *      - They have the money to pay for the creation.
      *
      * @param player Player triggering the event.
      * @param event PlayerItemConsumeEvent event.
-     * @param type The type of InfiniItem being used.
+     * @param type The type of InfiniItemType being used.
      */
-    private void FillInfiniBucket(Player player, PlayerBucketFillEvent event, InfiniItem type){
+    private void FillInfiniBucket(Player player, PlayerBucketFillEvent event, InfiniItemType type){
         if(type.IsEnabled()){
-            double useCost = type.GetSpawnPrice();
-            if (Main.economy.has(player, useCost)) {
-                if (player.hasPermission(type.GetPermissionPath() + ".fill")) {
-                    player.getInventory().addItem(f.CreateItem(type));
+            double spawnCost = type.GetSpawnPrice();
+            if (player.hasPermission(type.GetPermissionPath() + ".fill")) {
+                if (Main.ChargePlayer(player, spawnCost)) {
                     Main.SendPlayerMessage(player, "You created a " + type.GetName() + ".");
-                    if (useCost > 0) {
-                        Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + useCost + ChatColor.WHITE +
-                                " has been charged to your account.");
-                        Main.economy.withdrawPlayer(player, useCost);
-                    }
-
-                } else {
-                    Main.SendPlayerMessage(player, "You don't know how to create an infinite source contained " +
-                            "within a bucket.");
+                    event.setItemStack(f.CreateItem(type));
+                    return;
                 }
 
             } else {
-                Main.SendPlayerMessage(player, ChatColor.RED + "You have insufficient funds.");
-                event.setCancelled(true);
+                Main.SendPlayerMessage(player, "You don't know how to create an infinite source contained " +
+                        "within a bucket.");
             }
 
         }else{
             Main.SendPlayerMessage(player, type.GetName() + " has been disabled in the config.");
         }
-
 
         event.setCancelled(true);
     }

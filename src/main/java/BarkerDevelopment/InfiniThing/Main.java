@@ -14,7 +14,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Main for the plugin: Main
+ * Main for the plugin.
  */
 public class Main extends JavaPlugin {
     public static Server server;
@@ -106,5 +106,28 @@ public class Main extends JavaPlugin {
      */
     public static void SendPlayerMessage(Player player, String string){
         player.sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Thing] " + string);
+    }
+
+    /**
+     * Checks if the player has sufficient funds to be charged a cost.
+     *
+     * @param player The player to charge.
+     * @param cost The cost to charge the player.
+     * @return TRUE player has been charged. FALSE if player cannot be charged.
+     */
+    public static boolean ChargePlayer(Player player, double cost){
+        if(cost == 0){
+            return true;
+
+        }else if (Main.economy.has(player, cost)){
+            Main.economy.withdrawPlayer(player, cost);
+            Main.SendPlayerMessage(player, ChatColor.GREEN + "$" + cost + ChatColor.WHITE +
+                    " has been charged to your account.");
+            return true;
+
+        }else {
+            Main.SendPlayerMessage(player,ChatColor.RED + "You have insufficient funds.");
+            return false;
+        }
     }
 }

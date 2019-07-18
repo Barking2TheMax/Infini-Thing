@@ -7,17 +7,17 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 /**
- *
+ * InfiniItemFactory implements the Factory design pattern.
  */
 public class InfiniItemFactory {
     // Variables.
     private static InfiniItemFactory INSTANCE;
 
-    private InfiniItem empty;
-    private InfiniItem lava;
-    private InfiniItem milk;
+    private InfiniItemType empty;
+    private InfiniItemType lava;
+    private InfiniItemType milk;
     private ThrownInfiniItem pearl;
-    private InfiniItem water;
+    private InfiniItemType water;
 
 
     // Instantiation.
@@ -38,17 +38,17 @@ public class InfiniItemFactory {
      * Constructor implementing Singleton design pattern.
      */
     private InfiniItemFactory(){
-        empty = new InfiniItem(
+        empty = new InfiniItemType(
                 ChatColor.WHITE + "Empty " + ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Bucket",
                 Material.BUCKET,
                 "infini.bucket",
                 "empty"
         );
-        empty.AddAdditionalLore(ChatColor.RESET + "Left click to change bucket type.");
+        empty.AddAdditionalLore(ChatColor.RESET + "" + ChatColor.GRAY + "Left click to change bucket type.");
 
-        String changeLore = (ChatColor.RESET + "Throw on the floor to return it's potential.");
+        String changeLore = (ChatColor.RESET + "" + ChatColor.GRAY + "Throw on the floor to restore it's potential.");
 
-        lava = new InfiniItem(
+        lava = new InfiniItemType(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Lava",
                 Material.LAVA_BUCKET,
                 "infini.bucket",
@@ -56,7 +56,7 @@ public class InfiniItemFactory {
         );
         lava.AddAdditionalLore(changeLore);
 
-        milk = new InfiniItem(
+        milk = new InfiniItemType(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Milk",
                 Material.MILK_BUCKET,
                 "infini.bucket",
@@ -64,7 +64,7 @@ public class InfiniItemFactory {
         );
         milk.AddAdditionalLore(changeLore);
 
-        water = new InfiniItem(
+        water = new InfiniItemType(
                 ChatColor.GOLD + "Infini" + ChatColor.WHITE + "-Water",
                 Material.WATER_BUCKET,
                 "infini.bucket",
@@ -84,7 +84,7 @@ public class InfiniItemFactory {
 
     // Methods.
     /**
-     * Returns an InfiniItem based of the string passed in.
+     * Returns an InfiniItemType based of the string passed in.
      * Current types are:
      *      - empty
      *      - lava
@@ -93,9 +93,9 @@ public class InfiniItemFactory {
      *      - water
      *
      * @param type
-     * @return An InfiniItem object.
+     * @return An InfiniItemType object.
      */
-    public InfiniItem GetItem(String type){
+    public InfiniItemType GetItem(String type){
         switch (type){
             case "empty":
                 return empty;
@@ -119,22 +119,30 @@ public class InfiniItemFactory {
     }
 
     /**
+     * Creates an ItemStack version of an InfiniItemType.
+     * Current types are:
+     *      - empty
+     *      - lava
+     *      - milk
+     *      - pearl
+     *      - water
      *
-     * @param type
-     * @return
+     * @param type String type.
+     * @return ItemStack of InfiniItemType.
      */
     public ItemStack CreateItem(String type){
-        InfiniItem item = GetItem(type);
+        InfiniItemType item = GetItem(type);
 
         return (item != null) ? item.CreateItem() : null;
     }
 
     /**
+     * Creates an ItemStack version of an InfiniItemType.
      *
-     * @param type
-     * @return
+     * @param type InfiniItemType type.
+     * @return ItemStack of InfiniItemType.
      */
-    public ItemStack CreateItem(InfiniItem type){
+    public ItemStack CreateItem(InfiniItemType type){
         return (type != null) ? type.CreateItem() : null;
     }
 }

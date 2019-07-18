@@ -10,7 +10,6 @@ empty:
     spawning:
       craftable: false
       spawnable: true
-      spawn-cost-enabled: false
       spawn-cost: 1000
 
 # Infini-Lava config.
@@ -24,13 +23,12 @@ lava:
     spawning:
       craftable: false
       spawnable: true
-      spawn-cost-enabled: false
       spawn-cost: 1000
 
 # Infini-Milk config.
 milk:
   lore: "An infinite source of malk."
-  use-cost: 1000
+  use-cost: 10
 
   options:
     enabled: false
@@ -38,7 +36,6 @@ milk:
     spawning:
       craftable: false
       spawnable: true
-      spawn-cost-enabled: false
       spawn-cost: 1000
 
 
@@ -53,7 +50,6 @@ water:
     spawning:
       craftable: false
       spawnable: true
-      spawn-cost-enabled: false
       spawn-cost: 1000
 
 
@@ -73,5 +69,4 @@ pearl:
     spawning:
       craftable: false
       spawnable: true
-      spawn-cost-enabled: false
       spawn-cost: 15000

@@ -1,8 +1,8 @@
 package BarkerDevelopment.InfiniThing.Events;
 
+import BarkerDevelopment.InfiniThing.Items.InfiniItemType;
 import BarkerDevelopment.InfiniThing.Main;
 import BarkerDevelopment.InfiniThing.Items.InfiniItemFactory;
-import BarkerDevelopment.InfiniThing.Items.InfiniItem;
 import BarkerDevelopment.InfiniThing.Items.ThrownInfiniItem;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,7 +34,7 @@ public class PearlEvents implements Listener {
      */
     private PearlEvents(FileConfiguration config){
         f = InfiniItemFactory.GetInstance();
-        InfiniItem item = f.GetItem("pearl");
+        InfiniItemType item = f.GetItem("pearl");
         cooldown = new HashMap<>();
 
         UpdateCooldown();
@@ -68,7 +68,7 @@ public class PearlEvents implements Listener {
      * Updates the cooldown value from the config.
      */
     public void UpdateCooldown(){
-        InfiniItem item = f.GetItem("pearl");
+        InfiniItemType item = f.GetItem("pearl");
 
         try{
             COOLDOWN_TIME = Main.config.getInt(item.GetConfigPath() + ".options.cooldown.time");
@@ -145,19 +145,15 @@ public class PearlEvents implements Listener {
         if (type.IsEnabled()){
             double cost = type.GetPrice();
 
-            if (Main.economy.has(player, cost)){
-                Main.economy.withdrawPlayer(player, cost);
-                Main.SendPlayerMessage(player,"Your account has been charged " + ChatColor.GREEN + "$" + cost +
-                        ChatColor.WHITE + ".");
+            if (Main.ChargePlayer(player, cost)){
                 cooldown.put(player.getUniqueId(), System.currentTimeMillis());
-
-            }else {
-                Main.SendPlayerMessage(player,ChatColor.RED + "You have insufficient funds.");
-                event.setCancelled(true);
+                return;
             }
 
         }else{
-        Main.SendPlayerMessage(player, type.GetName() + " has been disabled in the config.");
+            Main.SendPlayerMessage(player, type.GetName() + " has been disabled in the config.");
         }
+
+        event.setCancelled(true);
     }
 }
