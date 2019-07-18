@@ -1,7 +1,7 @@
 package BarkerDevelopment.InfiniThing;
 
 import BarkerDevelopment.InfiniThing.Items.InfiniItemFactory;
-import BarkerDevelopment.InfiniThing.Items.InfiniItem;
+import BarkerDevelopment.InfiniThing.Items.InfiniItemType;
 import BarkerDevelopment.InfiniThing.Menus.InfiniMenuBehaviours.BucketSpawnButtonBehaviour;
 import BarkerDevelopment.InfiniThing.Menus.InfiniMenuBehaviours.PearlSpawnButtonBehaviour;
 import BarkerDevelopment.MinecraftMenus.Behaviours.CloseButtonBehaviour;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 
 
 /**
- * Handles command execution.
+ * Command class: Handles command execution.
  */
 public class Commands implements CommandExecutor {
     private InfiniItemFactory f;
@@ -65,11 +65,11 @@ public class Commands implements CommandExecutor {
                     switch(index){
 
                         case 0: // Bucket
-                            InfiniItem.ItemSpawnQuery(player, f.GetItem("empty"));
+                            f.GetItem("empty").Give(player);
                             return true;
 
                         case 1: // Pearl
-                            InfiniItem.ItemSpawnQuery(player, f.GetItem("pearl"));
+                            f.GetItem("pearl").Give(player);
                             return true;
 
                         default: // Unknown argument.
@@ -127,9 +127,9 @@ public class Commands implements CommandExecutor {
      *                  NullClick behaviour.
      * @param index The index of the button in the Menu object.
      */
-    private void AddInfiniMenuButton(Menu m, InfiniItem item, I_OnClickBehaviour behaviour, int index){
+    private void AddInfiniMenuButton(Menu m, InfiniItemType item, I_OnClickBehaviour behaviour, int index){
         MenuItem button = new MenuItem.Builder(item.GetMaterial())
-                .Text("Spawn " + item.GetName())
+                .Text("Give " + item.GetName())
                 .Action(behaviour)
                 .build();
 
