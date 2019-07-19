@@ -1,38 +1,38 @@
 # Infini-Thing
 A Minecraft plugin that provides players with an infinite version of some items and charges the player per use. Now, you don't need to continually run back and forth or build massive farms to get on with your project!
 
-# Items
+## Items
   - Infini-Bucket: A bottomless bucket; comes in three useful flavours!
   - Infini-Pearl: A boomerang like Ender Pearl.
 
-# Features
+## Features
   - Vault intergrated.
   - Updates and bug fixes.
   - Life time support - just message me!
   
-# Planned Features
-## Items
+## Planned Features
+### Items
   - Infini-Bone: A magical fertiliser that never seems to run out.
   - Infini-Stone: It's just cobblestone. I don't know what you want me to say.
   
-## Commands
+### Commands
   - /infini list: List the prices to spawn and use each item.
   - /infini reload: Reload the config.
   - /infini [bucket\pearl]: Changed functionality: Allows a user to bypass the spawn conditions, e.g. Price. 
 
-## Config
+### Config
   - Fully customisable messages.
   - Fully customisable menus.
   - Config for new items.
   
-## Other
+### Other
   - API: So other plugins can use the Infini-Items.
 
-# Commands
+## Commands
   - /infini: Opens the Infini-Menu, allowing you to view all the Infini- Items and their price to spawn.
   - /infini [bucket | pearl]: Gives you an Infini-Pearl or Infini-Bucket.
 
-# Permissions
+## Permissions
 infini.bucket.*: Gives access to all InfiniBucket permissions.
 infini.bucket.craft: Allows a player to craft an InfiniBucket.
 infini.bucket.spawn: Allows a player to spawn an InfiniBucket.
@@ -44,10 +44,10 @@ infini.pearl.craft:Allows a player to craft an InfiniPearl.
 infini.pearl.spawn: Allows a player to spawn an InfiniBucket.
 infini.pearl.use: Allows a player to use an InfiniBucket.
 
-# Requirements
+## Requirements
 This plugin requires the Vault plugin to be enabled on your server.
 
-# License
+## License
 Copyright (C) 2019-2019 Max Barker contact@maxbarker.co.uk
 
 Minecraft Menus is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
