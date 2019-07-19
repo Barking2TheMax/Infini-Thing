@@ -2,8 +2,8 @@
 A Minecraft plugin that provides players with an infinite version of some items and charges the player per use. Now, you don't need to continually run back and forth or build massive farms to get on with your project!
 
 # Items
-  - [x] Infini-Bucket: A bottomless bucket; comes in three useful flavours!
-  - [x] Infini-Pearl: A boomerang like Ender Pearl.
+  - Infini-Bucket: A bottomless bucket; comes in three useful flavours!
+  - Infini-Pearl: A boomerang like Ender Pearl.
 
 # Features
   - Vault intergrated.
