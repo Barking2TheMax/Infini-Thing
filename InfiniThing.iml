@@ -45,6 +45,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.8-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.github.milkbowl:vaultapi:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: com.github.BarkerDevelopment:MinecraftMenus-API:master-08d31e4722-1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.BarkerDevelopment:MinecraftMenus-API:aa21f268d0" level="project" />
   </component>
 </module>

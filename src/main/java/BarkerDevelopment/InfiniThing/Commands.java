@@ -63,7 +63,6 @@ public class Commands implements CommandExecutor {
                     int index = baseArgArray.indexOf( args[0].toLowerCase() );
 
                     switch(index){
-
                         case 0: // Bucket
                             f.GetItem("empty").Give(player);
                             return true;
@@ -100,46 +99,38 @@ public class Commands implements CommandExecutor {
      * @return An Infini-Menu menu object.
      */
     private Menu InitialiseInfiniMenu(){
-        Menu menu = new Menu.Builder(Main.plugin)
-                .Title("Select an " + ChatColor.GOLD + "Infini" + ChatColor.WHITE +"-Item")
+        return new Menu.Builder(Main.plugin)
+                .Title("Select an Infini-Item")
                 .Rows(4)
+                .Background(7)
+                .MenuItem(AddInfiniMenuButton(f.GetItem("empty"), new BucketSpawnButtonBehaviour()), 12)
+                .MenuItem(AddInfiniMenuButton(f.GetItem("pearl"), new PearlSpawnButtonBehaviour()), 14)
+                .MenuItem(new MenuItem.Builder(Material.STAINED_GLASS_PANE)
+                        .Text("Close Menu")
+                        .MaterialByte(14)
+                        .Action(new CloseButtonBehaviour())
+                        .build(), 31)
                 .build();
-
-        AddInfiniMenuButton(menu, f.GetItem("empty"), new BucketSpawnButtonBehaviour(), 12);
-        AddInfiniMenuButton(menu, f.GetItem("pearl"), new PearlSpawnButtonBehaviour(), 14);
-
-        MenuItem exitButton = new MenuItem.Builder(Material.STAINED_GLASS_PANE)
-                .Text("Close Menu")
-                .MaterialByte(14)
-                .Action(new CloseButtonBehaviour())
-                .build();
-        menu.SetMenuItem(31, exitButton);
-
-        return menu;
     }
 
     /**
      * Adds a MenuItem button to the menu.
      *
-     * @param m Menu object to which the MenuItem is to be added.
      * @param item The MenuItem to add.
      * @param behaviour The OnClick behaviour of the MenuItem. NOTE: If nothing is to happen when clicked, use the
      *                  NullClick behaviour.
-     * @param index The index of the button in the Menu object.
      */
-    private void AddInfiniMenuButton(Menu m, InfiniItemType item, I_OnClickBehaviour behaviour, int index){
-        MenuItem button = new MenuItem.Builder(item.GetMaterial())
-                .Text("Give " + item.GetName())
-                .Action(behaviour)
-                .build();
+    private MenuItem AddInfiniMenuButton(InfiniItemType item, I_OnClickBehaviour behaviour){
+        MenuItem.Builder bb = new MenuItem.Builder(item.GetMaterial())
+                .Text(item.GetName())
+                .Action(behaviour);
 
         double spawnCost = item.GetSpawnPrice();
-
         if (spawnCost > 0){
-            button.AddSubText("Costs " + ChatColor.GREEN + "$" + item.GetSpawnPrice() + ChatColor.DARK_PURPLE +
+            bb.SubText("Costs " + ChatColor.GREEN + "$" + item.GetSpawnPrice() + ChatColor.DARK_PURPLE +
                     ChatColor.ITALIC + " to spawn.");
         }
 
-        m.SetMenuItem(index, button);
+        return bb.build();
     }
 }

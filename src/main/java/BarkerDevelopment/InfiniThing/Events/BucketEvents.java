@@ -58,22 +58,39 @@ public class BucketEvents implements Listener {
      * @return An Infini-Bucket menu object.
      */
     private Menu InitialiseBucketMenu(){
-        Menu menu = new Menu.Builder(Main.plugin)
+        return new Menu.Builder(Main.plugin)
                 .Title("Select an Infini-Bucket")
                 .Rows(4)
+                .Background(7)
+                .MenuItem(AddBucketMenuButton(f.GetItem("lava"), new LavaButtonBehaviour()), 12)
+                .MenuItem(AddBucketMenuButton(f.GetItem("water"), new WaterButtonBehaviour()), 14)
+                .MenuItem(new MenuItem.Builder(Material.STAINED_GLASS_PANE)
+                        .Text("Close Menu")
+                        .MaterialByte(14)
+                        .Action(new CloseButtonBehaviour())
+                        .build(), 31)
                 .build();
+    }
 
-        AddBucketMenuButton(menu, f.GetItem("lava"), new LavaButtonBehaviour(), 12);
-        AddBucketMenuButton(menu, f.GetItem("water"), new WaterButtonBehaviour(), 14);
+    /**
+     * Adds a MenuItem button to the menu.
+     *
+     * @param item The MenuItem to add.
+     * @param behaviour The OnClick behaviour of the MenuItem. NOTE: If nothing is to happen when clicked, use the
+     *                  NullClick behaviour.
+     */
+    private MenuItem AddBucketMenuButton(InfiniItemType item, I_OnClickBehaviour behaviour){
+        MenuItem.Builder bb = new MenuItem.Builder(item.GetMaterial())
+                .Text("Select " + item.GetName())
+                .Action(behaviour);
 
-        MenuItem exitButton = new MenuItem.Builder(Material.STAINED_GLASS_PANE)
-                .Text("Close Menu")
-                .MaterialByte(14)
-                .Action(new CloseButtonBehaviour())
-                .build();
-        menu.SetMenuItem(31, exitButton);
+        double spawnCost = item.GetSpawnPrice();
+        if (spawnCost > 0){
+            bb.SubText("Costs " + ChatColor.GREEN + "$" + item.GetSpawnPrice() + ChatColor.DARK_PURPLE +
+                    ChatColor.ITALIC + " to spawn.");
+        }
 
-        return menu;
+       return bb.build();
     }
 
 
@@ -189,31 +206,6 @@ public class BucketEvents implements Listener {
 
 
     // Methods.
-    /**
-     * Adds a MenuItem button to the menu.
-     *
-     * @param m Menu object to which the MenuItem is to be added.
-     * @param item The MenuItem to add.
-     * @param behaviour The OnClick behaviour of the MenuItem. NOTE: If nothing is to happen when clicked, use the
-     *                  NullClick behaviour.
-     * @param index The index of the button in the Menu object.
-     */
-    private void AddBucketMenuButton(Menu m, InfiniItemType item, I_OnClickBehaviour behaviour, int index){
-        MenuItem button = new MenuItem.Builder(item.GetMaterial())
-                .Text("Select " + item.GetName())
-                .SubText(item.GetLoreString())
-                .Action(behaviour)
-                .build();
-
-        double spawnCost = item.GetSpawnPrice();
-        if (spawnCost > 0){
-            button.AddSubText("Costs " + ChatColor.GREEN + "$" + item.GetSpawnPrice() + ChatColor.DARK_PURPLE +
-                    ChatColor.ITALIC + " to spawn.");
-        }
-
-        m.SetMenuItem(index, button);
-    }
-
     /**
      * A player tries to drink an Infini-Milk. Only allows them to do so if:
      *      - Infini-Milk is enabled in the config.

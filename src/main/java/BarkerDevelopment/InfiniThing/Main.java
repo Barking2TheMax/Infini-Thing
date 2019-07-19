@@ -90,25 +90,6 @@ public class Main extends JavaPlugin {
     }
 
     /**
-     * Prints a formatted string to the server console.
-     *
-     * @param string String to send to the console.
-     */
-    public static void SendConsoleMessage(String string){
-       server.getConsoleSender().sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.GRAY + "Thing] " + string);
-    }
-
-    /**
-     * Prints a formatted string to the player.
-     *
-     * @param player The player to send the message to.
-     * @param string String to send to the player.
-     */
-    public static void SendPlayerMessage(Player player, String string){
-        player.sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Thing] " + string);
-    }
-
-    /**
      * Checks if the player has sufficient funds to be charged a cost.
      *
      * @param player The player to charge.
@@ -129,5 +110,24 @@ public class Main extends JavaPlugin {
             Main.SendPlayerMessage(player,ChatColor.RED + "You have insufficient funds.");
             return false;
         }
+    }
+
+    /**
+     * Prints a formatted string to the server console.
+     *
+     * @param string String to send to the console.
+     */
+    public static void SendConsoleMessage(String string){
+       server.getConsoleSender().sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.GRAY + "Thing] " + string);
+    }
+
+    /**
+     * Prints a formatted string to the player.
+     *
+     * @param player The player to send the message to.
+     * @param string String to send to the player.
+     */
+    public static void SendPlayerMessage(Player player, String string){
+        player.sendMessage("[" +  ChatColor.GOLD + "Infini" + ChatColor.WHITE + "Thing] " + string);
     }
 }

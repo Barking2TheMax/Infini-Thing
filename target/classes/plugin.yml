@@ -11,8 +11,8 @@ commands:
     aliases: inf
     usage: |
       /infini [bucket|pearl]
-      Example: /inf - Open the Infini Menu.
-      Example: /inf bucket - Spawn an Infini Bucket.
+      Example: /infini - Open the Infini Menu.
+      Example: /infini bucket - Spawn an Infini Bucket.
 
 permissions:
   infini.bucket.*:

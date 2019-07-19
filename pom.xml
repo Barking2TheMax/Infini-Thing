@@ -44,7 +44,7 @@
         <dependency>
             <groupId>com.github.BarkerDevelopment</groupId>
             <artifactId>MinecraftMenus-API</artifactId>
-            <version>master-SNAPSHOT</version>
+            <version>aa21f268d0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
